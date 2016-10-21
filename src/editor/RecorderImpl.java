@@ -7,7 +7,7 @@ import commands.*;
 
 public class RecorderImpl implements Recorder {
 	
-	private List<MyEntry<CommandInterface, String>> cmdList;
+	private List<CommandInterface> cmdList;
 	private boolean recording;
 	
 	public RecorderImpl() {
@@ -15,7 +15,7 @@ public class RecorderImpl implements Recorder {
 		recording = false;
 	}
 	
-	public List<MyEntry<CommandInterface, String>> getCmdList() {
+	public List<CommandInterface> getCmdList() {
 		return cmdList;
 	}
 
@@ -32,10 +32,8 @@ public class RecorderImpl implements Recorder {
 	}
 
 	@Override
-	public void recordCommand(CommandInterface c, String content) {
-		MyEntry<CommandInterface, String> entry = new MyEntry<CommandInterface, String>(c, content);
-		cmdList.add(entry);
-		System.out.println(c);
+	public void recordCommand(CommandInterface c) {
+		cmdList.add(c);
 	}
 
 }

@@ -30,9 +30,9 @@ public class Editor {
 	public void playRecording(){
 		CommandInterface c;
 		
-		List<MyEntry<CommandInterface,String>> cmds = record.getCmdList();
+		List<CommandInterface> cmds = record.getCmdList();
 		for(int i = 0;i < cmds.size(); i++){
-			c = cmds.get(i).getKey();
+			c = cmds.get(i);
 			c.execute();
 		}
 	}
@@ -135,7 +135,7 @@ public class Editor {
 					c = new Insert(edit.engine);
 					((Insert) c).setString(content);
 				}
-				edit.record.recordCommand(c, content);
+				edit.record.recordCommand(c);
 			}
 			
 			System.out.println("-----------------------------------------------------");
