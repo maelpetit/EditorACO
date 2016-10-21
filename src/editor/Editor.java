@@ -126,16 +126,7 @@ public class Editor {
 			}
 			//recording the command
 			if(edit.record.isRecording() && c != null){
-				if(c.getClass() == Select.class){
-					c = new Select(edit.engine);
-					String[] selectArgs = content.split("\\s+");
-					((Select) c).setStart(Integer.parseInt(selectArgs[0]));
-					((Select) c).setStop(Integer.parseInt(selectArgs[1]));
-				}else if(c.getClass() == Insert.class){
-					c = new Insert(edit.engine);
-					((Insert) c).setString(content);
-				}
-				edit.record.recordCommand(c);
+				edit.record.recordCommand(c, content, edit.engine);
 			}
 			
 			System.out.println("-----------------------------------------------------");

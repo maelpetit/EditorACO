@@ -32,7 +32,16 @@ public class RecorderImpl implements Recorder {
 	}
 
 	@Override
-	public void recordCommand(CommandInterface c) {
+	public void recordCommand(CommandInterface c, String content, Engine engine) {
+		if(c.getClass() == Select.class){
+			c = new Select(engine);
+			String[] selectArgs = content.split("\\s+");
+			((Select) c).setStart(Integer.parseInt(selectArgs[0]));
+			((Select) c).setStop(Integer.parseInt(selectArgs[1]));
+		}else if(c.getClass() == Insert.class){
+			c = new Insert(engine);
+			((Insert) c).setString(content);
+		}
 		cmdList.add(c);
 	}
 

@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/gui/start/EditorACOGUI.java</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/EditorACOGUI/src/gui/start/EditorACOGUI.java</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
