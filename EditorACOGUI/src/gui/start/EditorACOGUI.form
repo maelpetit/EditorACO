@@ -104,7 +104,9 @@
                   <Component id="insertButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="selectButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="cutButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="copyButton" min="-2" max="-2" attributes="0"/>
@@ -136,6 +138,7 @@
                       <Component id="undoButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="redoButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="recordToggle" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -164,16 +167,25 @@
             <Property name="text" type="java.lang.String" value="Cut"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cutButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="copyButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Copy"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="copyButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="pasteButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Paste"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pasteButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="playButton">
           <Properties>
@@ -199,6 +211,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="recordToggleActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="deleteButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Delete"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
