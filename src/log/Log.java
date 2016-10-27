@@ -1,4 +1,4 @@
-package editor;
+package log;
 
 public interface Log {
 	

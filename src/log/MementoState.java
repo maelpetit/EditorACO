@@ -1,4 +1,4 @@
-package editor;
+package log;
 
 public class MementoState implements Memento {
 	

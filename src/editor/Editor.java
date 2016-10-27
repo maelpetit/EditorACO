@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import commands.*;
+import old.UI;
 
 public class Editor {
 	private Engine engine;

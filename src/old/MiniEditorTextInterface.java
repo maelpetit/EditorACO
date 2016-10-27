@@ -1,8 +1,11 @@
-package editor;
+package old;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import editor.Engine;
+import editor.EngineImpl;
 
 public class MiniEditorTextInterface
 {

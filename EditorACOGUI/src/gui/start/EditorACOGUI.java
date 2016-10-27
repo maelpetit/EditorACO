@@ -10,6 +10,9 @@ import java.util.List;
 
 import commands.*;
 import editor.*;
+import log.LogImpl;
+import log.MementoState;
+import old.UI;
 
 /**
  *
