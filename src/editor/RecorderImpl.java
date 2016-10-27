@@ -33,12 +33,12 @@ public class RecorderImpl implements Recorder {
 
 	@Override
 	public void recordCommand(CommandInterface c, String content, Engine engine) {
-		if(c.getClass() == Select.class){
+		if(c instanceof Select){
 			c = new Select(engine);
 			String[] selectArgs = content.split("\\s+");
 			((Select) c).setStart(Integer.parseInt(selectArgs[0]));
 			((Select) c).setStop(Integer.parseInt(selectArgs[1]));
-		}else if(c.getClass() == Insert.class){
+		}else if(c instanceof Insert){
 			c = new Insert(engine);
 			((Insert) c).setString(content);
 		}
