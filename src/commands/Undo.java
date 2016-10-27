@@ -1,10 +1,10 @@
 package commands;
 
-import editor.EngineImpl;
+import editor.Engine;
 
 public class Undo extends Command implements CommandInterface {
 
-	public Undo(EngineImpl eng) {
+	public Undo(Engine eng) {
 		super(eng);
 		// TODO Auto-generated constructor stub
 	}

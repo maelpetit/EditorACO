@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import commands.*;
-import old.UI;
 
 public class Editor {
 	private Engine engine;
@@ -16,7 +15,7 @@ public class Editor {
 	
 	public Editor(){
 		engine = new EngineImpl();
-		ui = new UI(engine);
+		ui = new UI();
 		record = new RecorderImpl();
 	}
 	
@@ -66,8 +65,9 @@ public class Editor {
 			{
 				case 'I': /* Insert */
 					content = inputLine.substring(2);
-					((Insert) edit.ui.getCommand("insert")).setString(content);
-					c = edit.ui.executeCommand("insert");
+					c = new Insert(edit.engine);
+					((Insert) c).setString(content);
+					c.execute();
 					break;
 				case 'S': /* Select */
 					String numberString="";
@@ -79,9 +79,10 @@ public class Editor {
 						int start  = Integer.parseInt(numberString);
 						numberString = arguments[1];
 						int stop  = Integer.parseInt(numberString);
-						((Select) edit.ui.getCommand("select")).setStart(start);
-						((Select) edit.ui.getCommand("select")).setStop(stop);
-						c = edit.ui.executeCommand("select");
+						c = new Select(edit.engine);
+						((Select) c).setStart(start);
+						((Select) c).setStop(stop);
+						c.execute();
 					}
 					catch (Exception e)
 					{
@@ -90,16 +91,20 @@ public class Editor {
 					
 					break;
 				case 'X': /* Cut */
-					c = edit.ui.executeCommand("cut");
+					c = new Cut(edit.engine);
+					c.execute();
 					break;
 				case 'C': /* Copy */
-					c = edit.ui.executeCommand("copy");
+					c = new Copy(edit.engine);
+					c.execute();
 					break;
 				case 'V': /* Paste */
-					c = edit.ui.executeCommand("paste");
+					c = new Paste(edit.engine);
+					c.execute();
 					break;
 				case 'D': /* Delete */
-					c = edit.ui.executeCommand("delete");
+					c = new Delete(edit.engine);
+					c.execute();
 					break;
 				case 'R': /* Record */
 					//TODO verifier que ca enregistre pas deja

@@ -1,12 +1,22 @@
 package editor;
 
+import log.LogImpl;
+import log.MementoState;
+
 public class EngineImpl implements Engine
 {
 
 	/**
 	 * the buffer
 	 */
-	private Buffer buffer = new Buffer();
+	private Buffer buffer;
+	private LogImpl log;
+	
+	public EngineImpl() {
+		buffer = new Buffer();
+		log = new LogImpl();
+		log.recordState(new MementoState());
+	}
 	
 	/**
 	 * Getter for the content of the buffer
@@ -109,13 +119,46 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorUndo()
 	{
+		// TODO probleme de modification de la selection quand on undo et redo
 		System.out.println("DEBUG: performing Undo") ;
+		MementoState m = log.getPrevState();
+		buffer.setContent(m.getContent());
+		buffer.getSelection().setStart(m.getStart());
+		buffer.getSelection().setStop(m.getStop());
 	}
 
 	@Override
 	public void editorRedo()
 	{
-		System.out.println("DEBUG: performing Redo") ;
+		System.out.println("DEBUG: performing Redo");
+		MementoState m = log.getNextState();
+		buffer.setContent(m.getContent());
+		buffer.getSelection().setStart(m.getStart());
+		buffer.getSelection().setStop(m.getStop());
+	}
+
+	public LogImpl getLog() {
+		return log;
+	}
+
+	@Override
+	public boolean redoAvailable() {
+		return log.redoAvailable();
+	}
+
+	@Override
+	public boolean undoAvailable() {
+		return log.undoAvailable();
+	}
+
+	@Override
+	public int getSelectionStart() {
+		return buffer.getSelection().getStart();
+	}
+
+	@Override
+	public int getSelectionEnd() {
+		return buffer.getSelection().getStop();
 	}
 
 }

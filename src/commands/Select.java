@@ -11,6 +11,14 @@ public class Select extends Command implements CommandInterface {
 		super(eng);
 	}
 
+	public int getStart() {
+		return start;
+	}
+
+	public int getStop() {
+		return stop;
+	}
+	
 	public void setStart(int start) {
 		this.start = start;
 	}

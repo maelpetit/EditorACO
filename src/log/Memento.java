@@ -2,6 +2,7 @@ package log;
 
 public interface Memento {
 	
-	void setContent(String content);
+	int getStart();
+	int getStop();
 	String getContent();
 }

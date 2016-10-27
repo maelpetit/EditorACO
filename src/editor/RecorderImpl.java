@@ -34,10 +34,10 @@ public class RecorderImpl implements Recorder {
 	@Override
 	public void recordCommand(CommandInterface c, String content, Engine engine) {
 		if(c instanceof Select){
-			c = new Select(engine);
-			String[] selectArgs = content.split("\\s+");
-			((Select) c).setStart(Integer.parseInt(selectArgs[0]));
-			((Select) c).setStop(Integer.parseInt(selectArgs[1]));
+			Select s = new Select(engine);
+			s.setStart(((Select) c).getStart());
+			s.setStop(((Select) c).getStop());
+			c = s;
 		}else if(c instanceof Insert){
 			c = new Insert(engine);
 			((Insert) c).setString(content);
