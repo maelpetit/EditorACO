@@ -25,10 +25,6 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	private RecorderImpl record;
 	private LogImpl log;
 
-	public enum Commands{
-		Select,Insert,Copy,Cut,Delete,Paste,Redo,Undo
-	}
-
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Creates new form EditorACOGUI
