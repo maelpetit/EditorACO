@@ -1,14 +1,16 @@
 package commands;
 
 import editor.Engine;
+import gui.start.EditorACOGUI;
+import logNrecord.MementoState;
 
-public class Select extends Command implements CommandInterface {
+public class Select extends Command implements CommandInterface,RecordableCommand {
 
 	private int start;
 	private int stop;
 	
-	public Select(Engine eng) {
-		super(eng);
+	public Select(Engine eng, EditorACOGUI ui) {
+		super(eng, ui);
 	}
 
 	public int getStart() {
@@ -19,18 +21,21 @@ public class Select extends Command implements CommandInterface {
 		return stop;
 	}
 	
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public void setStop(int stop) {
-		this.stop = stop;
-	}
-	
 	@Override
 	public CommandInterface execute() {
+		start = gui.getStartSelection();
+		stop = gui.getStopSelection();
 		engine.editorSelect(start, stop);
 		return this;
 	}
 
+	@Override
+	public MementoState getMemento() {
+		return new MementoState("", start, stop);
+	}
+
+	@Override
+	public void addToLog() {
+		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
+	}
 }

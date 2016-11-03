@@ -1,7 +1,7 @@
 package editor;
 
-import log.LogImpl;
-import log.MementoState;
+import logNrecord.LogImpl;
+import logNrecord.MementoState;
 
 public class EngineImpl implements Engine
 {
@@ -73,6 +73,14 @@ public class EngineImpl implements Engine
 	public void editorSelect(int start, int stop)
 	{
 		System.out.println("DEBUG: selecting interval [" + start + "," + stop + "]");
+		if(stop > buffer.getContent().length()){
+			stop = buffer.getContent().length();
+			System.out.println("DEBUG: stop > buffer.getContent().length()");
+		}
+		if(start > buffer.getContent().length()){
+			start = buffer.getContent().length();
+			System.out.println("DEBUG: start > buffer.getContent().length()");
+		}
 		buffer.getSelection().setContent(buffer.getContent().substring(start, stop));
 		buffer.getSelection().setStart(start);
 		buffer.getSelection().setStop(stop);
@@ -108,11 +116,11 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorPaste()
 	{
-		System.out.println("DEBUG: performing Paste") ;
+		System.out.println("DEBUG: performing Paste");
 		buffer.setContent(buffer.getContent().substring(0, buffer.getSelection().getStart()) 
 				+ buffer.getClipBoard().getContent() 
 				+ buffer.getContent().substring(buffer.getSelection().getStop(), buffer.getContent().length()));
-		buffer.getSelection().setStart(buffer.getSelection().getStop() + buffer.getClipBoard().getContent().length());
+		buffer.getSelection().setStart(buffer.getSelection().getStop());
 		buffer.getSelection().setStop(buffer.getSelection().getStart());
 	}
 

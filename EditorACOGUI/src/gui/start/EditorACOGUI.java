@@ -10,7 +10,8 @@ import java.util.List;
 
 import commands.*;
 import editor.*;
-import log.MementoState;
+import logNrecord.MementoState;
+import logNrecord.RecorderImpl;
 
 /**
  *
@@ -264,10 +265,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
-		String content = text.getText();
-		Insert i = new Insert(engine);
-		i.setString(content);
-		record.recordCommand(ui.executeCommand(i), text.getText(), engine);
+		record.recordCommand(ui.executeCommand(new Insert(engine, this)), text.getText(), engine);
 		bufferContent.setText(engine.getBuffer());
 		selectionContent.setText(engine.getSelection());
 		text.setText("");
@@ -289,11 +287,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_playButtonActionPerformed
 
 	private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
-		int start = bufferContent.getSelectionStart();
-		int stop = bufferContent.getSelectionEnd();
-		Select s = new Select(engine);
-		s.setStart(start);
-		s.setStop(stop);
+		Select s = new Select(engine, this);
 		record.recordCommand(ui.executeCommand(s), "", engine);
 		selectionContent.setText(engine.getSelection());
 		
@@ -319,19 +313,19 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_selectButtonActionPerformed
 
 	private void cutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Cut(engine))), "", engine);
+		record.recordCommand(ui.executeCommand((new Cut(engine ,this))), "", engine);
 		bufferContent.setText(engine.getBuffer());
 		clipboardContent.setText(engine.getClipboard());
 		addToLog();
 	}//GEN-LAST:event_cutButtonActionPerformed
 
 	private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Copy(engine))), "", engine);
+		record.recordCommand(ui.executeCommand((new Copy(engine, this))), "", engine);
 		clipboardContent.setText(engine.getClipboard());
 	}//GEN-LAST:event_copyButtonActionPerformed
 
 	private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Paste(engine))), "", engine);
+		record.recordCommand(ui.executeCommand((new Paste(engine, this))), "", engine);
 		bufferContent.setText(engine.getBuffer());
 		addToLog();
 	}//GEN-LAST:event_pasteButtonActionPerformed
@@ -347,7 +341,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_recordToggleActionPerformed
 
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Delete(engine))), "", engine);
+		record.recordCommand(ui.executeCommand((new Delete(engine, this))), "", engine);
 		bufferContent.setText(engine.getBuffer());
 		selectionContent.setText(engine.getSelection());
 		addToLog();
@@ -355,7 +349,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
 
 	private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
 		if(engine.undoAvailable()){
-			ui.executeCommand((new Undo(engine)));
+			ui.executeCommand((new Undo(engine, this)));
 			redoButton.setEnabled(true);
 			if(!engine.undoAvailable()){
 				undoButton.setEnabled(false);
@@ -367,7 +361,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
 
 	private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
 		if(engine.redoAvailable()){
-			ui.executeCommand((new Redo(engine)));
+			ui.executeCommand((new Redo(engine, this)));
 			undoButton.setEnabled(true);
 			if(!engine.redoAvailable()){
 				redoButton.setEnabled(false);
@@ -378,18 +372,41 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_redoButtonActionPerformed
 
     private void bufferContentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bufferContentMouseReleased
-    	int start = bufferContent.getSelectionStart();
-		int stop = bufferContent.getSelectionEnd();
-		Select s = new Select(engine);
-		s.setStart(start);
-		s.setStop(stop);
+		Select s = new Select(engine, this);
 		record.recordCommand(ui.executeCommand(s), "", engine);
 		selectionContent.setText(engine.getSelection());
     }//GEN-LAST:event_bufferContentMouseReleased
 
 	private void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
+	}
+	
+	public String getText(){
+		return text.getText();
+	}
+	
+	public int getStartSelection(){
+		return engine.getSelectionStart();
+	}
+	
+	public int getStopSelection(){
+		return engine.getSelectionEnd();
+	}
+	
+	public void enableUndoButton(){
 		undoButton.setEnabled(true);
+	}
+	
+	public void disableUndoButton(){
+		undoButton.setEnabled(false);
+	}
+	
+	public void enableRedoButton(){
+		redoButton.setEnabled(true);
+	}
+	
+	public void disableRedoButton(){
+		redoButton.setEnabled(false);
 	}
 
 	/**

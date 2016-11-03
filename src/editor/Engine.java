@@ -1,6 +1,6 @@
 package editor;
 
-import log.Log;
+import logNrecord.Log;
 
 public interface Engine
 {

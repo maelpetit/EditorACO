@@ -1,6 +1,7 @@
-package editor;
+package logNrecord;
 
 import commands.CommandInterface;
+import editor.Engine;
 
 public interface Recorder {
 	

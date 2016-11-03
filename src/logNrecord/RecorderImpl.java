@@ -1,11 +1,12 @@
-package editor;
+package logNrecord;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import commands.*;
+import editor.Engine;
 
-public class RecorderImpl implements Recorder {
+public class RecorderImpl implements Recorder { //caretaker
 	
 	private List<CommandInterface> cmdList;
 	private boolean recording;
@@ -33,16 +34,10 @@ public class RecorderImpl implements Recorder {
 
 	@Override
 	public void recordCommand(CommandInterface c, String content, Engine engine) {
-		if(c instanceof Select){
-			Select s = new Select(engine);
-			s.setStart(((Select) c).getStart());
-			s.setStop(((Select) c).getStop());
-			c = s;
-		}else if(c instanceof Insert){
-			c = new Insert(engine);
-			((Insert) c).setString(content);
+		if(recording){
+			System.out.println("DEBUG: recording command " + c.getClass());
+			cmdList.add(c);
 		}
-		cmdList.add(c);
 	}
 
 }

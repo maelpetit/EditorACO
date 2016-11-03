@@ -1,7 +1,7 @@
 package editor;
 
 import commands.*;
-import log.MementoState;
+import logNrecord.MementoState;
 
 public class UI {
 

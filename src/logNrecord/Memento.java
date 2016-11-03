@@ -1,4 +1,4 @@
-package log;
+package logNrecord;
 
 public interface Memento {
 	
