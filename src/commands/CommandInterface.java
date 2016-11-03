@@ -2,6 +2,6 @@ package commands;
 
 public interface CommandInterface {
 	
-	public CommandInterface execute();
+	public void execute();
 
 }

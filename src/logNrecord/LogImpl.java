@@ -16,11 +16,13 @@ public class LogImpl implements Log {
 	@Override
 	public void recordState(MementoState ms) {
 		currentState++;
-		if(currentState < stateList.size())
-			stateList.set(currentState, ms);
-		else
-			stateList.add(ms);
-		System.out.println("currentState = " + currentState + " currentBuffer = " + ms.getContent());
+		if(currentState < stateList.size()){
+			for(int i = stateList.size()-1; i > currentState-1; i--){
+				stateList.remove(i);//removing the states that were overwritten by an Undo followed by a buffer-modifying action
+			}
+		}
+		stateList.add(ms);
+		System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + ms.getContent());
 	}
 
 	public int getCurrentState() {
@@ -31,7 +33,7 @@ public class LogImpl implements Log {
 		if(undoAvailable()){
 			currentState--;
 			MementoState m = stateList.get(currentState);
-			System.out.println("currentState = " + currentState + " currentBuffer = " + m.getContent());
+			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getContent());
 			return m;
 		}else{
 			System.out.println("No previous state available");
@@ -44,7 +46,7 @@ public class LogImpl implements Log {
 		if(redoAvailable()){
 			currentState++;
 			MementoState m = stateList.get(currentState);
-			System.out.println("currentState = " + currentState + " currentBuffer = " + m.getContent());
+			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getContent());
 			return m;
 		}else{
 			System.out.println("No next state available");

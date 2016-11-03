@@ -3,17 +3,22 @@ package commands;
 import editor.*;
 import gui.start.EditorACOGUI;
 import logNrecord.MementoState;
+import logNrecord.RecorderImpl;
 
-public class Paste extends Command implements CommandInterface,RecordableCommand {
+public class Paste extends RecordCommand implements RecordableCommandInterface {
 
-	public Paste(Engine engine, EditorACOGUI ui) {
-		super(engine, ui);
+	public Paste(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
+		super(engine, ui, rec);
 	}
 
 	@Override
-	public CommandInterface execute() {
+	public void execute() {
 		engine.editorPaste();
-		return this;
+		record.recordCommand(this);
+		addToLog();
+		if(!engine.redoAvailable()){
+			gui.disableRedoButton();
+		}
 	}
 
 	@Override
@@ -24,5 +29,11 @@ public class Paste extends Command implements CommandInterface,RecordableCommand
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
+		gui.enableUndoButton();
+	}
+
+	@Override
+	public void executePlay(MementoState mem) {
+		engine.editorPaste();
 	}
 }

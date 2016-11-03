@@ -10,9 +10,15 @@ public class Redo extends Command implements CommandInterface {
 	}
 
 	@Override
-	public CommandInterface execute() {
-		engine.editorRedo();
-		return this;
+	public void execute() {
+		if(engine.redoAvailable()){
+			engine.editorRedo();
+			gui.enableUndoButton();
+			if(!engine.redoAvailable()){
+				gui.disableRedoButton();
+			}
+		}else
+			System.out.println("Redo Unavailable");
 	}
 
 }

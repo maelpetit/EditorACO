@@ -3,14 +3,15 @@ package commands;
 import editor.Engine;
 import gui.start.EditorACOGUI;
 import logNrecord.MementoState;
+import logNrecord.RecorderImpl;
 
-public class Select extends Command implements CommandInterface,RecordableCommand {
+public class Select extends RecordCommand implements RecordableCommandInterface {
 
 	private int start;
 	private int stop;
 	
-	public Select(Engine eng, EditorACOGUI ui) {
-		super(eng, ui);
+	public Select(Engine eng, EditorACOGUI ui, RecorderImpl rec) {
+		super(eng, ui, rec);
 	}
 
 	public int getStart() {
@@ -22,11 +23,11 @@ public class Select extends Command implements CommandInterface,RecordableComman
 	}
 	
 	@Override
-	public CommandInterface execute() {
-		start = gui.getStartSelection();
-		stop = gui.getStopSelection();
+	public void execute() {
+		start = gui.getGUIStartSelection();
+		stop = gui.getGUIStopSelection();
 		engine.editorSelect(start, stop);
-		return this;
+		record.recordCommand(this);
 	}
 
 	@Override
@@ -36,6 +37,11 @@ public class Select extends Command implements CommandInterface,RecordableComman
 
 	@Override
 	public void addToLog() {
-		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
+		//never called because the state of the buffer doesnt change
+	}
+
+	@Override
+	public void executePlay(MementoState mem) {
+		engine.editorSelect(mem.getStart(), mem.getStop());
 	}
 }

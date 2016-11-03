@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import commands.*;
-import editor.Engine;
 
 public class RecorderImpl implements Recorder { //caretaker
 	
-	private List<CommandInterface> cmdList;
+	private List<CommandMementoPair> cmdList;
 	private boolean recording;
 	
 	public RecorderImpl() {
@@ -16,7 +15,11 @@ public class RecorderImpl implements Recorder { //caretaker
 		recording = false;
 	}
 	
-	public List<CommandInterface> getCmdList() {
+	public void eraseRecording(){
+		cmdList.clear();
+	}
+	
+	public List<CommandMementoPair> getCmdList() {
 		return cmdList;
 	}
 
@@ -33,10 +36,10 @@ public class RecorderImpl implements Recorder { //caretaker
 	}
 
 	@Override
-	public void recordCommand(CommandInterface c, String content, Engine engine) {
+	public void recordCommand(RecordableCommandInterface c) {
 		if(recording){
-			System.out.println("DEBUG: recording command " + c.getClass());
-			cmdList.add(c);
+			System.out.println("DEBUG: recording " + c.getClass());
+			cmdList.add(new CommandMementoPair(c, c.getMemento()));
 		}
 	}
 

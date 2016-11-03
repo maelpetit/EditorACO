@@ -1,6 +1,4 @@
-/commands/
-/editor/
-/gui/
-/log/
-/old/
 /logNrecord/
+/commands/
+/gui/
+/editor/

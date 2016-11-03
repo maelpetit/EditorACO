@@ -7,13 +7,18 @@ public class Undo extends Command implements CommandInterface {
 
 	public Undo(Engine eng, EditorACOGUI ui) {
 		super(eng, ui);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public CommandInterface execute() {
-		engine.editorUndo();
-		return this;
+	public void execute() {
+		if(engine.undoAvailable()){
+			engine.editorUndo();
+			gui.enableRedoButton();
+			if(!engine.undoAvailable()){
+				gui.disableUndoButton();
+			}
+		}else
+			System.out.println("Undo Unavailable");
 	}
 
 }

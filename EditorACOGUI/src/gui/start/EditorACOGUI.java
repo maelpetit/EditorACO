@@ -8,6 +8,8 @@ package gui.start;
 import java.awt.Color;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import commands.*;
 import editor.*;
 import logNrecord.MementoState;
@@ -20,7 +22,6 @@ import logNrecord.RecorderImpl;
 public class EditorACOGUI extends javax.swing.JFrame {
 
 	private EngineImpl engine;
-	private UI ui;
 	private RecorderImpl record;
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,6 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	public EditorACOGUI() {
 		initComponents();
 		engine = new EngineImpl();
-		ui = new UI();
 		record = new RecorderImpl();
 		undoButton.setEnabled(false);
 		redoButton.setEnabled(false);
@@ -265,132 +265,84 @@ public class EditorACOGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
-		record.recordCommand(ui.executeCommand(new Insert(engine, this)), text.getText(), engine);
+		new Insert(engine, this, record).execute();
 		bufferContent.setText(engine.getBuffer());
 		selectionContent.setText(engine.getSelection());
 		text.setText("");
-		addToLog();
 	}//GEN-LAST:event_insertButtonActionPerformed
 
 	private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-		CommandInterface c;
-
-		List<CommandInterface> cmds = record.getCmdList();
-		for(int i = 0;i < cmds.size(); i++){
-			c = cmds.get(i);
-			ui.executeCommand(c);
-		}
+		new Play(engine, this, record).execute();
 		bufferContent.setText(engine.getBuffer());
 		selectionContent.setText(engine.getSelection());
 		clipboardContent.setText(engine.getClipboard());
-		addToLog();
 	}//GEN-LAST:event_playButtonActionPerformed
+	
+	private void selectAction(){
+		new Select(engine, this, record).execute();
+		selectionContent.setText(engine.getSelection());
+	}
 
 	private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
-		Select s = new Select(engine, this);
-		record.recordCommand(ui.executeCommand(s), "", engine);
-		selectionContent.setText(engine.getSelection());
-		
-/*		String numberString="";
-		try
-		{
-			String[] arguments = text.getText().split("\\s+");
-			numberString = arguments[0];
-			int start  = Integer.parseInt(numberString);
-			numberString = arguments[1];
-			int stop  = Integer.parseInt(numberString);
-			((Select) ui.getCommand("select")).setStart(start);
-			((Select) ui.getCommand("select")).setStop(stop);
-			record.recordCommand(ui.executeCommand("select"), text.getText(), engine);
-			selectionContent.setText(engine.getSelection());
-			text.setText("");
-		}
-		catch (Exception e)
-		{
-			System.out.println("Invalid number: " + numberString);
-		}
-*/
+		selectAction();
 	}//GEN-LAST:event_selectButtonActionPerformed
+	
+	private void bufferContentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bufferContentMouseReleased
+		selectAction();
+    }//GEN-LAST:event_bufferContentMouseReleased
 
 	private void cutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Cut(engine ,this))), "", engine);
+		new Cut(engine ,this, record).execute();
 		bufferContent.setText(engine.getBuffer());
 		clipboardContent.setText(engine.getClipboard());
-		addToLog();
 	}//GEN-LAST:event_cutButtonActionPerformed
 
 	private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Copy(engine, this))), "", engine);
+		new Copy(engine, this, record).execute();
 		clipboardContent.setText(engine.getClipboard());
 	}//GEN-LAST:event_copyButtonActionPerformed
 
 	private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Paste(engine, this))), "", engine);
+		new Paste(engine, this, record).execute();
 		bufferContent.setText(engine.getBuffer());
-		addToLog();
 	}//GEN-LAST:event_pasteButtonActionPerformed
 
 	private void recordToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordToggleActionPerformed
 		if(recordToggle.isSelected()){
-			record.startRecording();
+			new StartRecording(engine, this, record).execute();
 			recordToggle.setForeground(Color.RED);
 		}else{
-			record.stopRecording();
+			new StopRecording(engine, this, record).execute();
 			recordToggle.setForeground(Color.BLACK);
 		}
 	}//GEN-LAST:event_recordToggleActionPerformed
 
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-		record.recordCommand(ui.executeCommand((new Delete(engine, this))), "", engine);
+		new Delete(engine, this, record).execute();
 		bufferContent.setText(engine.getBuffer());
 		selectionContent.setText(engine.getSelection());
-		addToLog();
 	}//GEN-LAST:event_deleteButtonActionPerformed
 
 	private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-		if(engine.undoAvailable()){
-			ui.executeCommand((new Undo(engine, this)));
-			redoButton.setEnabled(true);
-			if(!engine.undoAvailable()){
-				undoButton.setEnabled(false);
-			}
-			bufferContent.setText(engine.getBuffer());
-		}else
-			System.out.println("Undo Unavailable");
+		new Undo(engine, this).execute();
+		bufferContent.setText(engine.getBuffer());
 	}//GEN-LAST:event_undoButtonActionPerformed
 
 	private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
-		if(engine.redoAvailable()){
-			ui.executeCommand((new Redo(engine, this)));
-			undoButton.setEnabled(true);
-			if(!engine.redoAvailable()){
-				redoButton.setEnabled(false);
-			}
-			bufferContent.setText(engine.getBuffer());
-		}else
-			System.out.println("Redo Unavailable");
+		new Redo(engine, this).execute();
+		bufferContent.setText(engine.getBuffer());
 	}//GEN-LAST:event_redoButtonActionPerformed
-
-    private void bufferContentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bufferContentMouseReleased
-		Select s = new Select(engine, this);
-		record.recordCommand(ui.executeCommand(s), "", engine);
-		selectionContent.setText(engine.getSelection());
-    }//GEN-LAST:event_bufferContentMouseReleased
-
-	private void addToLog() {
-		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-	}
 	
 	public String getText(){
 		return text.getText();
 	}
 	
-	public int getStartSelection(){
-		return engine.getSelectionStart();
+	public int getGUIStartSelection(){
+		return bufferContent.getSelectionStart();
 	}
 	
-	public int getStopSelection(){
-		return engine.getSelectionEnd();
+	public int getGUIStopSelection(){
+		return bufferContent.getSelectionEnd();
 	}
 	
 	public void enableUndoButton(){
