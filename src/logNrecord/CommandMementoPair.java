@@ -1,21 +1,22 @@
 package logNrecord;
 
 import commands.*;
+import logNrecord.memento.Memento;
 
 public class CommandMementoPair {
-	private RecordableCommandInterface command;
-	private MementoState memento;
+	private RecordableCommand command;
+	private Memento memento;
 	
-	public CommandMementoPair(RecordableCommandInterface comm, MementoState mem){
+	public CommandMementoPair(RecordableCommand comm, Memento mem){
 		command = comm;
 		memento = mem;
 	}
 
-	public RecordableCommandInterface getCommand() {
+	public RecordableCommand getCommand() {
 		return command;
 	}
 
-	public MementoState getMemento() {
+	public Memento getMemento() {
 		return memento;
 	}
 

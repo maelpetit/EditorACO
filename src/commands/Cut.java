@@ -2,10 +2,12 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.MementoState;
 import logNrecord.RecorderImpl;
+import logNrecord.memento.Memento;
+import logNrecord.memento.MementoCut;
+import logNrecord.memento.MementoState;
 
-public class Cut extends RecordCommand implements RecordableCommandInterface {
+public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
 
 	public Cut(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
 		super(engine, ui, rec);
@@ -19,11 +21,14 @@ public class Cut extends RecordCommand implements RecordableCommandInterface {
 		if(!engine.redoAvailable()){
 			gui.disableRedoButton();
 		}
+		gui.updateBuffer();
+		gui.updateClipboard();
+		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	@Override
-	public MementoState getMemento() {
-		return new MementoState();
+	public MementoCut getMemento() {
+		return new MementoCut();
 	}
 	
 	@Override
@@ -33,7 +38,7 @@ public class Cut extends RecordCommand implements RecordableCommandInterface {
 	}
 
 	@Override
-	public void executePlay(MementoState mem) {
+	public void executePlay(Memento mem) {
 		engine.editorCut();
 	}
 

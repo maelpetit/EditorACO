@@ -1,6 +1,6 @@
-package logNrecord;
+package logNrecord.memento;
 
-public class MementoState implements Memento {
+public class MementoState implements MementoText, MementoSelection {
 	
 	private String bufferState;
 	private int startSelect;
@@ -19,7 +19,7 @@ public class MementoState implements Memento {
 	}
 
 	@Override
-	public String getContent() {
+	public String getText() {
 		return bufferState;
 	}
 

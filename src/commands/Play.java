@@ -5,8 +5,10 @@ import java.util.List;
 import editor.*;
 import gui.start.EditorACOGUI;
 import logNrecord.*;
+import logNrecord.memento.Memento;
+import logNrecord.memento.MementoState;
 
-public class Play extends RecordCommand implements RecordableCommandInterface {
+public class Play extends RecordCommand implements LogCommand {
 	
 	public Play(Engine eng, EditorACOGUI gui, RecorderImpl rec) {
 		super(eng, gui, rec);
@@ -19,22 +21,16 @@ public class Play extends RecordCommand implements RecordableCommandInterface {
 			cmds.get(i).getCommand().executePlay(cmds.get(i).getMemento());
 		}
 		addToLog();
-	}
-
-	@Override
-	public MementoState getMemento() {
-		return new MementoState();
+		gui.updateBuffer();
+		gui.updateClipboard();
+		gui.updateSelection();
+		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
 		gui.enableUndoButton();
-	}
-
-	@Override
-	public void executePlay(MementoState mem) {
-		// UNUSED
 	}
 
 }

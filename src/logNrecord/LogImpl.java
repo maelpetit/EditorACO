@@ -3,6 +3,8 @@ package logNrecord;
 import java.util.ArrayList;
 import java.util.List;
 
+import logNrecord.memento.MementoState;
+
 public class LogImpl implements Log {
 	
 	private List<MementoState> stateList;
@@ -22,7 +24,7 @@ public class LogImpl implements Log {
 			}
 		}
 		stateList.add(ms);
-		System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + ms.getContent());
+		System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + ms.getText());
 	}
 
 	public int getCurrentState() {
@@ -33,7 +35,7 @@ public class LogImpl implements Log {
 		if(undoAvailable()){
 			currentState--;
 			MementoState m = stateList.get(currentState);
-			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getContent());
+			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getText());
 			return m;
 		}else{
 			System.out.println("No previous state available");
@@ -46,7 +48,7 @@ public class LogImpl implements Log {
 		if(redoAvailable()){
 			currentState++;
 			MementoState m = stateList.get(currentState);
-			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getContent());
+			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getText());
 			return m;
 		}else{
 			System.out.println("No next state available");

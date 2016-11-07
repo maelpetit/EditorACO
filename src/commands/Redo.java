@@ -19,6 +19,10 @@ public class Redo extends Command implements CommandInterface {
 			}
 		}else
 			System.out.println("Redo Unavailable");
+		
+		gui.updateBuffer();
+		gui.updateSelection();
+		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 }

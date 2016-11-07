@@ -2,10 +2,12 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.MementoState;
 import logNrecord.RecorderImpl;
+import logNrecord.memento.Memento;
+import logNrecord.memento.MementoInsert;
+import logNrecord.memento.MementoState;
 
-public class Insert extends RecordCommand implements RecordableCommandInterface {
+public class Insert extends RecordCommand implements RecordableCommand,LogCommand {
 	
 	private String insert;
 
@@ -23,14 +25,17 @@ public class Insert extends RecordCommand implements RecordableCommandInterface 
 		if(!engine.redoAvailable()){
 			gui.disableRedoButton();
 		}
+		gui.updateBuffer();
+		gui.updateSelection();
+		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 	
 	public void setContent(String content){
 		insert = content;
 	}
 	
-	public MementoState getMemento(){
-		return new MementoState(insert, 0, 0);
+	public MementoInsert getMemento(){
+		return new MementoInsert(insert);
 	}
 
 	@Override
@@ -40,8 +45,8 @@ public class Insert extends RecordCommand implements RecordableCommandInterface 
 	}
 
 	@Override
-	public void executePlay(MementoState mem) {
-		engine.editorInsert(mem.getContent());
+	public void executePlay(Memento mem) {
+		engine.editorInsert(((MementoInsert) mem).getText());
 	}
 
 }

@@ -19,6 +19,10 @@ public class Undo extends Command implements CommandInterface {
 			}
 		}else
 			System.out.println("Undo Unavailable");
+		
+		gui.updateBuffer();
+		gui.updateSelection();
+		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 }

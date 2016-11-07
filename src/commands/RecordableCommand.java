@@ -1,8 +1,9 @@
 package commands;
 
-import logNrecord.*;
+import logNrecord.memento.Memento;
 
-public interface RecordableCommand {
-	MementoState getMemento();
-	void addToLog();
+public interface RecordableCommand extends CommandInterface{
+	
+	Memento getMemento();
+	void executePlay(Memento mem);
 }

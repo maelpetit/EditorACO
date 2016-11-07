@@ -2,10 +2,10 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.MementoState;
 import logNrecord.RecorderImpl;
+import logNrecord.memento.*;
 
-public class Copy extends RecordCommand implements RecordableCommandInterface {
+public class Copy extends RecordCommand implements RecordableCommand {
 
 	public Copy(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
 		super(engine, ui, rec);
@@ -15,22 +15,17 @@ public class Copy extends RecordCommand implements RecordableCommandInterface {
 	public void execute() {
 		engine.editorCopy();
 		record.recordCommand(this);
-		addToLog();
+		gui.updateClipboard();
 	}
 
 	@Override
-	public MementoState getMemento() {
-		return new MementoState();
+	public MementoCopy getMemento() {
+		return new MementoCopy();
 	}
 
-	@Override
-	public void addToLog() {
-		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-		gui.enableUndoButton();
-	}
 
 	@Override
-	public void executePlay(MementoState mem) {
+	public void executePlay(Memento mem) {
 		engine.editorCopy();
 	}
 

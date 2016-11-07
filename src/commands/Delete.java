@@ -2,10 +2,10 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.MementoState;
 import logNrecord.RecorderImpl;
+import logNrecord.memento.*;
 
-public class Delete extends RecordCommand implements RecordableCommandInterface {
+public class Delete extends RecordCommand implements RecordableCommand,LogCommand {
 
 	public Delete(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
 		super(engine, ui, rec);
@@ -19,11 +19,14 @@ public class Delete extends RecordCommand implements RecordableCommandInterface 
 		if(!engine.redoAvailable()){
 			gui.disableRedoButton();
 		}
+		gui.updateBuffer();
+		gui.updateSelection();
+		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	@Override
-	public MementoState getMemento() {
-		return new MementoState();
+	public MementoDelete getMemento() {
+		return new MementoDelete();
 	}
 	
 	@Override
@@ -33,7 +36,7 @@ public class Delete extends RecordCommand implements RecordableCommandInterface 
 	}
 
 	@Override
-	public void executePlay(MementoState mem) {
+	public void executePlay(Memento mem) {
 		engine.editorInsert("");
 	}
 

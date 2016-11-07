@@ -1,5 +1,7 @@
 package logNrecord;
 
+import logNrecord.memento.MementoState;
+
 public interface Log {
 	
 	public void recordState(MementoState ms);

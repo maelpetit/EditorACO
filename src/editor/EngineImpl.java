@@ -1,7 +1,7 @@
 package editor;
 
 import logNrecord.LogImpl;
-import logNrecord.MementoState;
+import logNrecord.memento.MementoState;
 
 public class EngineImpl implements Engine
 {
@@ -93,7 +93,10 @@ public class EngineImpl implements Engine
 	public void editorCopy()
 	{
 		System.out.println("DEBUG: performing Copy") ;
-		buffer.getClipBoard().setContent(buffer.getSelection().getContent());
+		if(buffer.getSelection().getStart() != buffer.getSelection().getStop()){//we dont copy when no text is selected
+			buffer.getClipBoard().setContent(buffer.getSelection().getContent());
+		}else
+			System.out.println("DEBUG: Nothing to copy");
 	}
 
 	/**
@@ -130,7 +133,7 @@ public class EngineImpl implements Engine
 		// TODO probleme de modification de la selection quand on undo et redo
 		System.out.println("DEBUG: performing Undo") ;
 		MementoState m = log.getPrevState();
-		buffer.setContent(m.getContent());
+		buffer.setContent(m.getText());
 		buffer.getSelection().setStart(m.getStart());
 		buffer.getSelection().setStop(m.getStop());
 	}
@@ -140,7 +143,7 @@ public class EngineImpl implements Engine
 	{
 		System.out.println("DEBUG: performing Redo");
 		MementoState m = log.getNextState();
-		buffer.setContent(m.getContent());
+		buffer.setContent(m.getText());
 		buffer.getSelection().setStart(m.getStart());
 		buffer.getSelection().setStop(m.getStop());
 	}

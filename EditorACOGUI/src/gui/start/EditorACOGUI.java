@@ -6,13 +6,15 @@
 package gui.start;
 
 import java.awt.Color;
-import java.util.List;
 
-import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.Highlighter.HighlightPainter;
 
 import commands.*;
 import editor.*;
-import logNrecord.MementoState;
 import logNrecord.RecorderImpl;
 
 /**
@@ -23,6 +25,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
 
 	private EngineImpl engine;
 	private RecorderImpl record;
+	private Object highlight;
 
 	private static final long serialVersionUID = 1L;
 	/**
@@ -35,6 +38,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		undoButton.setEnabled(false);
 		redoButton.setEnabled(false);
 		selectButton.setEnabled(false);
+		highlight = null;
 	}
 
 	/**
@@ -264,23 +268,47 @@ public class EditorACOGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+	public javax.swing.JTextArea getBufferTextArea() {
+		return bufferContent;
+	}
+	
+	public void updateBuffer(){
+		bufferContent.setText(engine.getBuffer());
+	}
+	public void updateSelection(){
+		selectionContent.setText(engine.getSelection());
+	}
+	public void updateClipboard(){
+		clipboardContent.setText(engine.getClipboard());
+	}
+	
+	public void highlight(int start, int stop){
+		Highlighter highlighter = bufferContent.getHighlighter();
+		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
+		try {
+			if(highlight == null){
+				highlight = highlighter.addHighlight(start, stop, painter );
+			}else{
+				highlighter.changeHighlight(highlight, start, stop);
+			}
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 	private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
 		new Insert(engine, this, record).execute();
-		bufferContent.setText(engine.getBuffer());
-		selectionContent.setText(engine.getSelection());
 		text.setText("");
 	}//GEN-LAST:event_insertButtonActionPerformed
 
 	private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
 		new Play(engine, this, record).execute();
-		bufferContent.setText(engine.getBuffer());
-		selectionContent.setText(engine.getSelection());
-		clipboardContent.setText(engine.getClipboard());
 	}//GEN-LAST:event_playButtonActionPerformed
 	
 	private void selectAction(){
 		new Select(engine, this, record).execute();
-		selectionContent.setText(engine.getSelection());
 	}
 
 	private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
@@ -293,18 +321,14 @@ public class EditorACOGUI extends javax.swing.JFrame {
 
 	private void cutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButtonActionPerformed
 		new Cut(engine ,this, record).execute();
-		bufferContent.setText(engine.getBuffer());
-		clipboardContent.setText(engine.getClipboard());
 	}//GEN-LAST:event_cutButtonActionPerformed
 
 	private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
 		new Copy(engine, this, record).execute();
-		clipboardContent.setText(engine.getClipboard());
 	}//GEN-LAST:event_copyButtonActionPerformed
 
 	private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
 		new Paste(engine, this, record).execute();
-		bufferContent.setText(engine.getBuffer());
 	}//GEN-LAST:event_pasteButtonActionPerformed
 
 	private void recordToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordToggleActionPerformed
@@ -319,18 +343,14 @@ public class EditorACOGUI extends javax.swing.JFrame {
 
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
 		new Delete(engine, this, record).execute();
-		bufferContent.setText(engine.getBuffer());
-		selectionContent.setText(engine.getSelection());
 	}//GEN-LAST:event_deleteButtonActionPerformed
 
 	private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
 		new Undo(engine, this).execute();
-		bufferContent.setText(engine.getBuffer());
 	}//GEN-LAST:event_undoButtonActionPerformed
 
 	private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
 		new Redo(engine, this).execute();
-		bufferContent.setText(engine.getBuffer());
 	}//GEN-LAST:event_redoButtonActionPerformed
 	
 	public String getText(){
