@@ -19,7 +19,7 @@ import logNrecord.RecorderImpl;
 
 /**
  *
- * @author Mael
+ * @author Mael PETIT, Jules PAGET
  */
 public class EditorACOGUI extends javax.swing.JFrame {
 
