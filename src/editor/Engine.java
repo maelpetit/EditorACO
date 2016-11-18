@@ -1,6 +1,6 @@
 package editor;
 
-import logNrecord.Log;
+import logNrecord.*;
 
 public interface Engine
 {
@@ -9,6 +9,7 @@ public interface Engine
 	public int getSelectionStart();
 	public int getSelectionEnd();
 	public String getClipboard();
+	public Recorder getRecorder();
 
 	public void editorInsert(String substring);
 	public void editorSelect(int start, int stop);

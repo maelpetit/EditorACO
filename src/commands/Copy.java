@@ -2,20 +2,23 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.RecorderImpl;
 import logNrecord.memento.*;
 
 public class Copy extends RecordCommand implements RecordableCommand {
 
-	public Copy(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
-		super(engine, ui, rec);
+	public Copy(Engine engine, EditorACOGUI ui) {
+		super(engine, ui);
 	}
 
 	@Override
 	public void execute() {
-		engine.editorCopy();
-		record.recordCommand(this);
-		gui.updateClipboard();
+		if(engine.getSelectionStart() == engine.getSelectionEnd())
+			System.out.println("DEBUG: Nothing to copy");
+		else{
+			engine.editorCopy();
+			engine.getRecorder().recordCommand(this);
+			gui.updateClipboard();
+		}
 	}
 
 	@Override

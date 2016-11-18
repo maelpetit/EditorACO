@@ -6,16 +6,15 @@
 package gui.start;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import commands.*;
 import editor.*;
-import logNrecord.RecorderImpl;
 
 /**
  *
@@ -24,7 +23,6 @@ import logNrecord.RecorderImpl;
 public class EditorACOGUI extends javax.swing.JFrame {
 
 	private EngineImpl engine;
-	private RecorderImpl record;
 	private Object highlight;
 
 	private static final long serialVersionUID = 1L;
@@ -34,11 +32,11 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	public EditorACOGUI() {
 		initComponents();
 		engine = new EngineImpl();
-		record = new RecorderImpl();
 		undoButton.setEnabled(false);
 		redoButton.setEnabled(false);
 		selectButton.setEnabled(false);
 		highlight = null;
+		text.requestFocusInWindow();
 	}
 
 	/**
@@ -78,6 +76,11 @@ public class EditorACOGUI extends javax.swing.JFrame {
 
         text.setColumns(20);
         text.setRows(5);
+        text.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(text);
 
         insertButton.setText("Insert");
@@ -88,7 +91,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
         });
 
         selectButton.setText("Select");
-        selectButton.setToolTipText("Use the mouse to select text in the buffer up above");
+        selectButton.setToolTipText("Use the mouse to select text\nin the buffer up above");
         selectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectButtonActionPerformed(evt);
@@ -96,6 +99,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
         });
 
         cutButton.setText("Cut");
+        cutButton.setToolTipText("");
         cutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cutButtonActionPerformed(evt);
@@ -206,6 +210,7 @@ public class EditorACOGUI extends javax.swing.JFrame {
                 bufferContentMouseReleased(evt);
             }
         });
+     
         jScrollPane2.setViewportView(bufferContent);
 
         selectionContent.setEditable(false);
@@ -292,66 +297,142 @@ public class EditorACOGUI extends javax.swing.JFrame {
 				highlighter.changeHighlight(highlight, start, stop);
 			}
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
-
-	private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
-		new Insert(engine, this, record).execute();
+	
+	private void insertAction(){
+		new Insert(engine, this).execute();
 		text.setText("");
+	}
+	
+	private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
+		insertAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_insertButtonActionPerformed
-
+	
+	private void playAction(){
+		new Play(engine, this).execute();
+	}
+	
 	private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-		new Play(engine, this, record).execute();
+		playAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_playButtonActionPerformed
 	
 	private void selectAction(){
-		new Select(engine, this, record).execute();
+		new Select(engine, this).execute();
 	}
-
+	
 	private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
 		selectAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_selectButtonActionPerformed
 	
 	private void bufferContentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bufferContentMouseReleased
 		selectAction();
+		text.requestFocusInWindow();
     }//GEN-LAST:event_bufferContentMouseReleased
-
+	
+	private void cutAction(){
+		new Cut(engine ,this).execute();
+	}
+	
 	private void cutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButtonActionPerformed
-		new Cut(engine ,this, record).execute();
+		cutAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_cutButtonActionPerformed
+	
+	private void copyAction(){
+		new Copy(engine ,this).execute();
+	}
 
 	private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-		new Copy(engine, this, record).execute();
+		copyAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_copyButtonActionPerformed
+	
+	private void pasteAction(){
+		new Paste(engine, this).execute();
+	}
 
 	private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
-		new Paste(engine, this, record).execute();
+		pasteAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_pasteButtonActionPerformed
-
-	private void recordToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordToggleActionPerformed
+	
+	private void recordAction(){
 		if(recordToggle.isSelected()){
-			new StartRecording(engine, this, record).execute();
+			new StartRecording(engine, this).execute();
 			recordToggle.setForeground(Color.RED);
 		}else{
-			new StopRecording(engine, this, record).execute();
+			new StopRecording(engine, this).execute();
 			recordToggle.setForeground(Color.BLACK);
 		}
+	}
+
+	private void recordToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordToggleActionPerformed
+		recordAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_recordToggleActionPerformed
+	
+	private void deleteAction(){
+		new Delete(engine, this).execute();
+	}
 
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-		new Delete(engine, this, record).execute();
+		deleteAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_deleteButtonActionPerformed
+	
+	private void undoAction(){
+		new Undo(engine, this).execute();
+	}
 
 	private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
-		new Undo(engine, this).execute();
+		undoAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_undoButtonActionPerformed
+	
+	private void redoAction(){
+		new Redo(engine, this).execute();
+	}
 
 	private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
-		new Redo(engine, this).execute();
+		redoAction();
+		text.requestFocusInWindow();
 	}//GEN-LAST:event_redoButtonActionPerformed
+	
+	private void selectAllAction(){
+		new SelectAll(engine, this).execute();
+	}
+
+    private void textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textKeyPressed
+            keyEventHandler(evt);
+    }//GEN-LAST:event_textKeyPressed
+
+    
+    private void keyEventHandler(KeyEvent evt){
+    	if(evt.isAltDown()){
+        	switch(evt.getKeyCode()){
+        	case KeyEvent.VK_C: copyAction(); break;
+        	case KeyEvent.VK_V: pasteAction(); break;
+        	case KeyEvent.VK_X: cutAction(); break;
+        	case KeyEvent.VK_Z: undoAction(); break;
+        	case KeyEvent.VK_Y: redoAction(); break;
+        	case KeyEvent.VK_A: selectAllAction(); break;
+        	case KeyEvent.VK_UNDEFINED: System.out.println("UNDEFINED key shortcut");
+        	default: break;
+        	}
+                System.out.println("you pressed ALT + " + String.valueOf(evt.getKeyChar()));
+        }else if(evt.getKeyCode() == KeyEvent.VK_CONTROL){
+        	insertAction();
+        	System.out.println("you pressed CONTROL");
+        }else{
+        	System.out.println("Not a command key");
+        }
+    }
 	
 	public String getText(){
 		return text.getText();

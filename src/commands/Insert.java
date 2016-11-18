@@ -2,17 +2,16 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.RecorderImpl;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoInsert;
 import logNrecord.memento.MementoState;
 
 public class Insert extends RecordCommand implements RecordableCommand,LogCommand {
-	
+
 	private String insert;
 
-	public Insert(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
-		super(engine, ui, rec);
+	public Insert(Engine engine, EditorACOGUI ui) {
+		super(engine, ui);
 		insert = "";
 	}
 
@@ -20,7 +19,7 @@ public class Insert extends RecordCommand implements RecordableCommand,LogComman
 	public void execute() {
 		insert = gui.getText();
 		engine.editorInsert(insert);
-		record.recordCommand(this);
+		engine.getRecorder().recordCommand(this);
 		addToLog();
 		if(!engine.redoAvailable()){
 			gui.disableRedoButton();
@@ -28,12 +27,13 @@ public class Insert extends RecordCommand implements RecordableCommand,LogComman
 		gui.updateBuffer();
 		gui.updateSelection();
 		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+
 	}
-	
+
 	public void setContent(String content){
 		insert = content;
 	}
-	
+
 	public MementoInsert getMemento(){
 		return new MementoInsert(insert);
 	}

@@ -4,20 +4,17 @@ import javax.swing.JOptionPane;
 
 import editor.Engine;
 import gui.start.EditorACOGUI;
-import logNrecord.RecorderImpl;
 
 public class StartRecording extends Command implements CommandInterface {
-	private RecorderImpl record;
 	
-	public StartRecording(Engine eng, EditorACOGUI ui, RecorderImpl rec) {
+	public StartRecording(Engine eng, EditorACOGUI ui) {
 		super(eng, ui);
-		record = rec;
 	}
 
 	@Override
 	public void execute() {
-		record.startRecording();
-		if(!record.getCmdList().isEmpty()){
+		engine.getRecorder().startRecording();
+		if(!engine.getRecorder().getCmdList().isEmpty()){
 			Object[] options = {"Keep","Erase"};
 			int keep = JOptionPane.showOptionDialog(gui,
 					"Erase the last recording ?",
@@ -28,7 +25,7 @@ public class StartRecording extends Command implements CommandInterface {
 					options,  //the titles of buttons
 					options[0]); //default button title
 			if(keep == JOptionPane.NO_OPTION){
-				record.eraseRecording();
+				engine.getRecorder().eraseRecording();
 			}
 		}
 	}

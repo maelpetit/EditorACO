@@ -2,21 +2,18 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.RecorderImpl;
-import logNrecord.memento.Memento;
-import logNrecord.memento.MementoCut;
-import logNrecord.memento.MementoState;
+import logNrecord.memento.*;
 
 public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Cut(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
-		super(engine, ui, rec);
+	public Cut(Engine engine, EditorACOGUI ui) {
+		super(engine, ui);
 	}
 
 	@Override
 	public void execute() {
 		engine.editorCut();
-		record.recordCommand(this);
+		engine.getRecorder().recordCommand(this);
 		addToLog();
 		if(!engine.redoAvailable()){
 			gui.disableRedoButton();

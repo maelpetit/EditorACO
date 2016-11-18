@@ -2,19 +2,18 @@ package commands;
 
 import editor.*;
 import gui.start.EditorACOGUI;
-import logNrecord.RecorderImpl;
 import logNrecord.memento.*;
 
 public class Delete extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Delete(Engine engine, EditorACOGUI ui, RecorderImpl rec) {
-		super(engine, ui, rec);
+	public Delete(Engine engine, EditorACOGUI ui) {
+		super(engine, ui);
 	}
 
 	@Override
 	public void execute() {
 		engine.editorInsert("");
-		record.recordCommand(this);
+		engine.getRecorder().recordCommand(this);
 		addToLog();
 		if(!engine.redoAvailable()){
 			gui.disableRedoButton();

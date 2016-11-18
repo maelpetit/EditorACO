@@ -1,7 +1,8 @@
 package logNrecord;
 
+import java.util.List;
+
 import commands.RecordableCommand;
-import editor.Engine;
 
 public interface Recorder {
 	
@@ -9,5 +10,7 @@ public interface Recorder {
 	public void stopRecording();
 	public boolean isRecording();
 	public void recordCommand(RecordableCommand c);
+	public List<CommandMementoPair> getCmdList();
+	public void eraseRecording();
 
 }

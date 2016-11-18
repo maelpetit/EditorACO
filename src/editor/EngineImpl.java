@@ -1,6 +1,6 @@
 package editor;
 
-import logNrecord.LogImpl;
+import logNrecord.*;
 import logNrecord.memento.MementoState;
 
 public class EngineImpl implements Engine
@@ -10,12 +10,14 @@ public class EngineImpl implements Engine
 	 * the buffer
 	 */
 	private Buffer buffer;
-	private LogImpl log;
+	private Log log;
+	private Recorder record;
 	
 	public EngineImpl() {
 		buffer = new Buffer();
 		log = new LogImpl();
 		log.recordState(new MementoState());
+		record = new RecorderImpl();
 	}
 	
 	/**
@@ -46,6 +48,10 @@ public class EngineImpl implements Engine
 	public String getClipboard()
 	{
 		return buffer.getClipBoard().getContent();
+	}
+
+	public Recorder getRecorder() {
+		return record;
 	}
 
 	/**
@@ -93,10 +99,8 @@ public class EngineImpl implements Engine
 	public void editorCopy()
 	{
 		System.out.println("DEBUG: performing Copy") ;
-		if(buffer.getSelection().getStart() != buffer.getSelection().getStop()){//we dont copy when no text is selected
-			buffer.getClipBoard().setContent(buffer.getSelection().getContent());
-		}else
-			System.out.println("DEBUG: Nothing to copy");
+		buffer.getClipBoard().setContent(buffer.getSelection().getContent());
+
 	}
 
 	/**
@@ -123,7 +127,7 @@ public class EngineImpl implements Engine
 		buffer.setContent(buffer.getContent().substring(0, buffer.getSelection().getStart()) 
 				+ buffer.getClipBoard().getContent() 
 				+ buffer.getContent().substring(buffer.getSelection().getStop(), buffer.getContent().length()));
-		buffer.getSelection().setStart(buffer.getSelection().getStop());
+		buffer.getSelection().setStart(buffer.getSelection().getStart() + buffer.getClipBoard().getContent().length());
 		buffer.getSelection().setStop(buffer.getSelection().getStart());
 	}
 
@@ -148,7 +152,7 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStop(m.getStop());
 	}
 
-	public LogImpl getLog() {
+	public Log getLog() {
 		return log;
 	}
 
