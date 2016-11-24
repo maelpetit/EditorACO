@@ -8,8 +8,8 @@ import logNrecord.memento.MementoState;
 
 public class Paste extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Paste(Engine engine, EditorACOGUI ui) {
-		super(engine, ui);
+	public Paste(Engine engine) {
+		super(engine);
 	}
 
 	@Override
@@ -20,12 +20,7 @@ public class Paste extends RecordCommand implements RecordableCommand,LogCommand
 			engine.editorPaste();
 			engine.getRecorder().recordCommand(this);
 			addToLog();
-			if(!engine.redoAvailable()){
-				gui.disableRedoButton();
 			}
-			gui.updateBuffer();
-			gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
-		}
 	}
 
 	@Override
@@ -36,7 +31,6 @@ public class Paste extends RecordCommand implements RecordableCommand,LogCommand
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-		gui.enableUndoButton();
 	}
  
 	@Override

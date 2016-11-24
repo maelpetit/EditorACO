@@ -9,8 +9,8 @@ import logNrecord.memento.MementoState;
 
 public class Play extends RecordCommand implements LogCommand {
 	
-	public Play(Engine eng, EditorACOGUI gui) {
-		super(eng, gui);
+	public Play(Engine eng) {
+		super(eng);
 	}
 
 	@Override
@@ -20,16 +20,11 @@ public class Play extends RecordCommand implements LogCommand {
 			cmds.get(i).getCommand().executePlay(cmds.get(i).getMemento());
 		}
 		addToLog();
-		gui.updateBuffer();
-		gui.updateClipboard();
-		gui.updateSelection();
-		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-		gui.enableUndoButton();
 	}
 
 }

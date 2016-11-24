@@ -5,8 +5,8 @@ import gui.start.EditorACOGUI;
 
 public class StopRecording extends Command implements CommandInterface {
 	
-	public StopRecording(Engine eng, EditorACOGUI ui) {
-		super(eng, ui);
+	public StopRecording(Engine eng) {
+		super(eng);
 	}
 
 	@Override

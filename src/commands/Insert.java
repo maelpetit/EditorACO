@@ -10,24 +10,16 @@ public class Insert extends RecordCommand implements RecordableCommand,LogComman
 
 	private String insert;
 
-	public Insert(Engine engine, EditorACOGUI ui) {
-		super(engine, ui);
-		insert = "";
+	public Insert(Engine engine, String ins) {
+		super(engine);
+		insert = ins;
 	}
 
 	@Override
 	public void execute() {
-		insert = gui.getText();
 		engine.editorInsert(insert);
 		engine.getRecorder().recordCommand(this);
 		addToLog();
-		if(!engine.redoAvailable()){
-			gui.disableRedoButton();
-		}
-		gui.updateBuffer();
-		gui.updateSelection();
-		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
-
 	}
 
 	public void setContent(String content){
@@ -41,7 +33,6 @@ public class Insert extends RecordCommand implements RecordableCommand,LogComman
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-		gui.enableUndoButton();
 	}
 
 	@Override

@@ -6,8 +6,8 @@ import logNrecord.memento.*;
 
 public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Cut(Engine engine, EditorACOGUI ui) {
-		super(engine, ui);
+	public Cut(Engine engine) {
+		super(engine);
 	}
 
 	@Override
@@ -15,12 +15,6 @@ public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
 		engine.editorCut();
 		engine.getRecorder().recordCommand(this);
 		addToLog();
-		if(!engine.redoAvailable()){
-			gui.disableRedoButton();
-		}
-		gui.updateBuffer();
-		gui.updateClipboard();
-		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	@Override
@@ -31,7 +25,6 @@ public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-		gui.enableUndoButton();
 	}
 
 	@Override

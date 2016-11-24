@@ -6,8 +6,8 @@ import logNrecord.memento.*;
 
 public class Copy extends RecordCommand implements RecordableCommand {
 
-	public Copy(Engine engine, EditorACOGUI ui) {
-		super(engine, ui);
+	public Copy(Engine engine) {
+		super(engine);
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class Copy extends RecordCommand implements RecordableCommand {
 		else{
 			engine.editorCopy();
 			engine.getRecorder().recordCommand(this);
-			gui.updateClipboard();
+			
 		}
 	}
 

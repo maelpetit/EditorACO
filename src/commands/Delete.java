@@ -6,8 +6,8 @@ import logNrecord.memento.*;
 
 public class Delete extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Delete(Engine engine, EditorACOGUI ui) {
-		super(engine, ui);
+	public Delete(Engine engine) {
+		super(engine);
 	}
 
 	@Override
@@ -15,12 +15,6 @@ public class Delete extends RecordCommand implements RecordableCommand,LogComman
 		engine.editorInsert("");
 		engine.getRecorder().recordCommand(this);
 		addToLog();
-		if(!engine.redoAvailable()){
-			gui.disableRedoButton();
-		}
-		gui.updateBuffer();
-		gui.updateSelection();
-		gui.highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	@Override
@@ -31,7 +25,6 @@ public class Delete extends RecordCommand implements RecordableCommand,LogComman
 	@Override
 	public void addToLog() {
 		engine.getLog().recordState(new MementoState(engine.getBuffer(), engine.getSelectionStart(), engine.getSelectionEnd()));
-		gui.enableUndoButton();
 	}
 
 	@Override

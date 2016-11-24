@@ -5,11 +5,9 @@ import gui.start.EditorACOGUI;
 
 public class Command  {
 	protected Engine engine;
-	protected EditorACOGUI gui;
 	
-	public Command(Engine eng, EditorACOGUI ui){
+	public Command(Engine eng){
 		engine = eng;
-		gui = ui;
 	}
 
 }

@@ -10,8 +10,10 @@ public class Select extends RecordCommand implements RecordableCommand {
 	private int start;
 	private int stop;
 	
-	public Select(Engine eng, EditorACOGUI ui) {
-		super(eng, ui);
+	public Select(Engine eng, int selectionStart, int selectionStop) {
+		super(eng);
+		start = selectionStart;
+		stop = selectionStop;
 	}
 
 	public int getStart() {
@@ -24,12 +26,8 @@ public class Select extends RecordCommand implements RecordableCommand {
 	
 	@Override
 	public void execute() {
-		start = gui.getGUIStartSelection();
-		stop = gui.getGUIStopSelection();
 		engine.editorSelect(start, stop);
 		engine.getRecorder().recordCommand(this);
-		gui.updateSelection();
-		gui.highlight(start, stop);
 	}
 
 	@Override

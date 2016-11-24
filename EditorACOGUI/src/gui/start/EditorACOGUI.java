@@ -8,6 +8,7 @@ package gui.start;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
@@ -22,7 +23,7 @@ import editor.*;
  */
 public class EditorACOGUI extends javax.swing.JFrame {
 
-	private EngineImpl engine;
+	private Engine engine;
 	private Object highlight;
 
 	private static final long serialVersionUID = 1L;
@@ -303,7 +304,16 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}
 	
 	private void insertAction(){
-		new Insert(engine, this).execute();
+		new Insert(engine, getText()).execute();
+		if(!engine.redoAvailable()){
+			disableRedoButton();
+		}
+		if(engine.undoAvailable()){
+			enableUndoButton();
+		}
+		updateBuffer();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 		text.setText("");
 	}
 	
@@ -313,7 +323,18 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_insertButtonActionPerformed
 	
 	private void playAction(){
-		new Play(engine, this).execute();
+		new Play(engine).execute();
+		if(!engine.redoAvailable()){
+			disableRedoButton();
+		}
+		if(engine.undoAvailable()){
+			enableUndoButton();
+		}
+		updateBuffer();
+		updateClipboard();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+		
 	}
 	
 	private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
@@ -322,7 +343,10 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_playButtonActionPerformed
 	
 	private void selectAction(){
-		new Select(engine, this).execute();
+		new Select(engine, getGUIStartSelection(), getGUIStopSelection()).execute();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+		
 	}
 	
 	private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
@@ -336,7 +360,16 @@ public class EditorACOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_bufferContentMouseReleased
 	
 	private void cutAction(){
-		new Cut(engine ,this).execute();
+		new Cut(engine).execute();
+		if(!engine.redoAvailable()){
+			disableRedoButton();
+		}
+		if(engine.undoAvailable()){
+			enableUndoButton();
+		}
+		updateBuffer();
+		updateClipboard();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 	
 	private void cutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButtonActionPerformed
@@ -345,7 +378,8 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_cutButtonActionPerformed
 	
 	private void copyAction(){
-		new Copy(engine ,this).execute();
+		new Copy(engine).execute();
+		updateClipboard();
 	}
 
 	private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
@@ -354,7 +388,16 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_copyButtonActionPerformed
 	
 	private void pasteAction(){
-		new Paste(engine, this).execute();
+		new Paste(engine).execute();
+		if(!engine.redoAvailable()){
+			disableRedoButton();
+		}
+		if(engine.undoAvailable()){
+			enableUndoButton();
+		}
+		updateBuffer();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+		
 	}
 
 	private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
@@ -362,12 +405,30 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_pasteButtonActionPerformed
 	
+	private void eraseLastRecordingPrompt(){
+		if(!engine.getRecorder().getCmdList().isEmpty()){
+			Object[] options = {"Keep","Erase"};
+			int keep = JOptionPane.showOptionDialog(this,
+					"Erase the last recording ?",
+					"Do you wish to keep the last recording/nor erase and start a new one ?",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,     //do not use a custom Icon
+					options,  //the titles of buttons
+					options[0]); //default button title
+			if(keep == JOptionPane.NO_OPTION){
+				engine.getRecorder().eraseRecording();
+			}
+		}
+	}
+	
 	private void recordAction(){
 		if(recordToggle.isSelected()){
-			new StartRecording(engine, this).execute();
+			eraseLastRecordingPrompt();
+			new StartRecording(engine).execute();
 			recordToggle.setForeground(Color.RED);
 		}else{
-			new StopRecording(engine, this).execute();
+			new StopRecording(engine).execute();
 			recordToggle.setForeground(Color.BLACK);
 		}
 	}
@@ -378,7 +439,16 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_recordToggleActionPerformed
 	
 	private void deleteAction(){
-		new Delete(engine, this).execute();
+		new Delete(engine).execute();
+		if(!engine.redoAvailable()){
+			disableRedoButton();
+		}
+		if(engine.undoAvailable()){
+			enableUndoButton();
+		}
+		updateBuffer();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -387,7 +457,16 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_deleteButtonActionPerformed
 	
 	private void undoAction(){
-		new Undo(engine, this).execute();
+		new Undo(engine).execute();
+		if(engine.redoAvailable()){
+			enableRedoButton();
+		}
+		if(!engine.undoAvailable()){
+			disableUndoButton();
+		}
+		updateBuffer();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
@@ -396,7 +475,16 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_undoButtonActionPerformed
 	
 	private void redoAction(){
-		new Redo(engine, this).execute();
+		new Redo(engine).execute();
+		if(!engine.redoAvailable()){
+			disableRedoButton();
+		}
+		if(engine.undoAvailable()){
+			enableUndoButton();
+		}
+		updateBuffer();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
 	private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
@@ -405,7 +493,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 	}//GEN-LAST:event_redoButtonActionPerformed
 	
 	private void selectAllAction(){
-		new SelectAll(engine, this).execute();
+		new SelectAll(engine).execute();
+		updateSelection();
+		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
 
     private void textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textKeyPressed

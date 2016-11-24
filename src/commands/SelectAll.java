@@ -7,8 +7,8 @@ import logNrecord.memento.MementoSelectAll;
 
 public class SelectAll extends RecordCommand implements RecordableCommand {
 
-	public SelectAll(Engine eng, EditorACOGUI ui) {
-		super(eng, ui);
+	public SelectAll(Engine eng) {
+		super(eng);
 	}
 
 	@Override
@@ -16,8 +16,6 @@ public class SelectAll extends RecordCommand implements RecordableCommand {
 		int stop = engine.getBuffer().length();
 		engine.editorSelect(0, stop);
 		engine.getRecorder().recordCommand(this);
-		gui.updateSelection();
-		gui.highlight(0, stop);
 	}
 
 	@Override
