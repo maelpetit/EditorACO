@@ -1,19 +1,20 @@
 package commands;
 
-import javax.swing.JOptionPane;
-
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 
 public class StartRecording extends Command implements CommandInterface {
 	
-	public StartRecording(Engine eng) {
-		super(eng);
+	public StartRecording(Engine eng, GUI ui) {
+		super(eng, ui);
 	}
 
 	@Override
 	public void execute() {
 		engine.getRecorder().startRecording();
+		if(gui.eraseRecording()){
+			engine.getRecorder().eraseRecording();
+		}
 	}
 
 }

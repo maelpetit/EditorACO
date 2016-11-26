@@ -1,13 +1,13 @@
 package commands;
 
 import editor.*;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.*;
 
 public class Copy extends RecordCommand implements RecordableCommand {
 
-	public Copy(Engine engine) {
-		super(engine);
+	public Copy(Engine engine, GUI ui) {
+		super(engine, ui);
 	}
 
 	@Override
@@ -17,7 +17,6 @@ public class Copy extends RecordCommand implements RecordableCommand {
 		else{
 			engine.editorCopy();
 			engine.getRecorder().recordCommand(this);
-			
 		}
 	}
 

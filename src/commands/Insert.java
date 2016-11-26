@@ -1,7 +1,7 @@
 package commands;
 
 import editor.*;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoInsert;
 import logNrecord.memento.MementoState;
@@ -10,13 +10,14 @@ public class Insert extends RecordCommand implements RecordableCommand,LogComman
 
 	private String insert;
 
-	public Insert(Engine engine, String ins) {
-		super(engine);
-		insert = ins;
+	public Insert(Engine engine, GUI GUI) {
+		super(engine, GUI);
+		insert = "";
 	}
 
 	@Override
 	public void execute() {
+		insert = gui.getText();
 		engine.editorInsert(insert);
 		engine.getRecorder().recordCommand(this);
 		addToLog();

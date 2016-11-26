@@ -1,12 +1,12 @@
 package commands;
 
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 
 public class Redo extends Command implements CommandInterface {
 
-	public Redo(Engine eng) {
-		super(eng);
+	public Redo(Engine eng ,GUI ui) {
+		super(eng, ui);
 	}
 
 	@Override
@@ -15,7 +15,6 @@ public class Redo extends Command implements CommandInterface {
 			engine.editorRedo();
 		}else
 			System.out.println("Redo Unavailable");
-		
-		}
+	}
 
 }

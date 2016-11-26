@@ -1,7 +1,7 @@
 package commands;
 
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoSelect;
 
@@ -10,10 +10,8 @@ public class Select extends RecordCommand implements RecordableCommand {
 	private int start;
 	private int stop;
 	
-	public Select(Engine eng, int selectionStart, int selectionStop) {
-		super(eng);
-		start = selectionStart;
-		stop = selectionStop;
+	public Select(Engine eng, GUI ui) {
+		super(eng, ui);
 	}
 
 	public int getStart() {
@@ -26,6 +24,8 @@ public class Select extends RecordCommand implements RecordableCommand {
 	
 	@Override
 	public void execute() {
+		start = gui.getGUIStartSelection();
+		stop = gui.getGUIStopSelection();
 		engine.editorSelect(start, stop);
 		engine.getRecorder().recordCommand(this);
 	}

@@ -3,14 +3,14 @@ package commands;
 import java.util.List;
 
 import editor.*;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.*;
 import logNrecord.memento.MementoState;
 
 public class Play extends RecordCommand implements LogCommand {
 	
-	public Play(Engine eng) {
-		super(eng);
+	public Play(Engine eng, GUI gui) {
+		super(eng, gui);
 	}
 
 	@Override

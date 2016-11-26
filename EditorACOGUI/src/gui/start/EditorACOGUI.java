@@ -21,9 +21,9 @@ import editor.*;
  *
  * @author Mael PETIT, Jules PAGET
  */
-public class EditorACOGUI extends javax.swing.JFrame {
+public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 
-	private Engine engine;
+	private EngineImpl engine;
 	private Object highlight;
 
 	private static final long serialVersionUID = 1L;
@@ -278,17 +278,17 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		return bufferContent;
 	}
 	
-	public void updateBuffer(){
+	private void updateBuffer(){
 		bufferContent.setText(engine.getBuffer());
 	}
-	public void updateSelection(){
+	private void updateSelection(){
 		selectionContent.setText(engine.getSelection());
 	}
-	public void updateClipboard(){
+	private void updateClipboard(){
 		clipboardContent.setText(engine.getClipboard());
 	}
 	
-	public void highlight(int start, int stop){
+	private void highlight(int start, int stop){
 		Highlighter highlighter = bufferContent.getHighlighter();
 		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
 		try {
@@ -303,17 +303,18 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		
 	}
 	
-	private void insertAction(){
-		new Insert(engine, getText()).execute();
-		if(!engine.redoAvailable()){
-			disableRedoButton();
-		}
-		if(engine.undoAvailable()){
-			enableUndoButton();
-		}
+	private void updateGUI(){
+		enableRedoButton(engine.redoAvailable());
+		enableUndoButton(engine.undoAvailable());
 		updateBuffer();
+		updateClipboard();
 		updateSelection();
 		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+	}
+	
+	public void insertAction(){
+		new Insert(engine, this).execute();
+		updateGUI();
 		text.setText("");
 	}
 	
@@ -322,19 +323,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_insertButtonActionPerformed
 	
-	private void playAction(){
-		new Play(engine).execute();
-		if(!engine.redoAvailable()){
-			disableRedoButton();
-		}
-		if(engine.undoAvailable()){
-			enableUndoButton();
-		}
-		updateBuffer();
-		updateClipboard();
-		updateSelection();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
-		
+	public void playAction(){
+		new Play(engine, this).execute();
+		updateGUI();
 	}
 	
 	private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
@@ -342,11 +333,10 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_playButtonActionPerformed
 	
-	private void selectAction(){
-		new Select(engine, getGUIStartSelection(), getGUIStopSelection()).execute();
+	public void selectAction(){
+		new Select(engine, this).execute();
 		updateSelection();
 		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
-		
 	}
 	
 	private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
@@ -359,17 +349,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
     }//GEN-LAST:event_bufferContentMouseReleased
 	
-	private void cutAction(){
-		new Cut(engine).execute();
-		if(!engine.redoAvailable()){
-			disableRedoButton();
-		}
-		if(engine.undoAvailable()){
-			enableUndoButton();
-		}
-		updateBuffer();
-		updateClipboard();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+	public void cutAction(){
+		new Cut(engine ,this).execute();
+		updateGUI();
 	}
 	
 	private void cutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButtonActionPerformed
@@ -377,9 +359,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_cutButtonActionPerformed
 	
-	private void copyAction(){
-		new Copy(engine).execute();
-		updateClipboard();
+	public void copyAction(){
+		new Copy(engine ,this).execute();
+		updateGUI();
 	}
 
 	private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
@@ -387,17 +369,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_copyButtonActionPerformed
 	
-	private void pasteAction(){
-		new Paste(engine).execute();
-		if(!engine.redoAvailable()){
-			disableRedoButton();
-		}
-		if(engine.undoAvailable()){
-			enableUndoButton();
-		}
-		updateBuffer();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
-		
+	public void pasteAction(){
+		new Paste(engine, this).execute();
+		updateGUI();
 	}
 
 	private void pasteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButtonActionPerformed
@@ -405,7 +379,15 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_pasteButtonActionPerformed
 	
-	private void eraseLastRecordingPrompt(){
+	public void startRecordingAction(){
+		new StartRecording(engine, this).execute();
+	}
+	
+	public void stopRecordingAction(){
+		new StopRecording(engine, this).execute();
+	}
+	
+	public boolean eraseRecording(){
 		if(!engine.getRecorder().getCmdList().isEmpty()){
 			Object[] options = {"Keep","Erase"};
 			int keep = JOptionPane.showOptionDialog(this,
@@ -417,38 +399,27 @@ public class EditorACOGUI extends javax.swing.JFrame {
 					options,  //the titles of buttons
 					options[0]); //default button title
 			if(keep == JOptionPane.NO_OPTION){
-				engine.getRecorder().eraseRecording();
+				return true;
 			}
+			return false;
 		}
-	}
-	
-	private void recordAction(){
-		if(recordToggle.isSelected()){
-			eraseLastRecordingPrompt();
-			new StartRecording(engine).execute();
-			recordToggle.setForeground(Color.RED);
-		}else{
-			new StopRecording(engine).execute();
-			recordToggle.setForeground(Color.BLACK);
-		}
+		return false;
 	}
 
 	private void recordToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordToggleActionPerformed
-		recordAction();
+		if(recordToggle.isSelected()){
+			startRecordingAction();
+			recordToggle.setForeground(Color.RED);
+		}else{
+			stopRecordingAction();
+			recordToggle.setForeground(Color.BLACK);
+		}
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_recordToggleActionPerformed
 	
-	private void deleteAction(){
-		new Delete(engine).execute();
-		if(!engine.redoAvailable()){
-			disableRedoButton();
-		}
-		if(engine.undoAvailable()){
-			enableUndoButton();
-		}
-		updateBuffer();
-		updateSelection();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+	public void deleteAction(){
+		new Delete(engine, this).execute();
+		updateGUI();
 	}
 
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -456,17 +427,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_deleteButtonActionPerformed
 	
-	private void undoAction(){
-		new Undo(engine).execute();
-		if(engine.redoAvailable()){
-			enableRedoButton();
-		}
-		if(!engine.undoAvailable()){
-			disableUndoButton();
-		}
-		updateBuffer();
-		updateSelection();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+	public void undoAction(){
+		new Undo(engine, this).execute();
+		updateGUI();
 	}
 
 	private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
@@ -474,17 +437,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_undoButtonActionPerformed
 	
-	private void redoAction(){
-		new Redo(engine).execute();
-		if(!engine.redoAvailable()){
-			disableRedoButton();
-		}
-		if(engine.undoAvailable()){
-			enableUndoButton();
-		}
-		updateBuffer();
-		updateSelection();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+	public void redoAction(){
+		new Redo(engine, this).execute();
+		updateGUI();
 	}
 
 	private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
@@ -492,10 +447,9 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_redoButtonActionPerformed
 	
-	private void selectAllAction(){
-		new SelectAll(engine).execute();
-		updateSelection();
-		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
+	public void selectAllAction(){
+		new SelectAll(engine, this).execute();
+		updateGUI();
 	}
 
     private void textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textKeyPressed
@@ -536,21 +490,14 @@ public class EditorACOGUI extends javax.swing.JFrame {
 		return bufferContent.getSelectionEnd();
 	}
 	
-	public void enableUndoButton(){
-		undoButton.setEnabled(true);
+	private void enableUndoButton(boolean enable){
+		undoButton.setEnabled(enable);
 	}
 	
-	public void disableUndoButton(){
-		undoButton.setEnabled(false);
+	private void enableRedoButton(boolean enable){
+		redoButton.setEnabled(enable);
 	}
 	
-	public void enableRedoButton(){
-		redoButton.setEnabled(true);
-	}
-	
-	public void disableRedoButton(){
-		redoButton.setEnabled(false);
-	}
 
 	/**
 	 * @param args the command line arguments

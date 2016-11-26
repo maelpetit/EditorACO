@@ -1,15 +1,15 @@
 package commands;
 
 import editor.*;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoPaste;
 import logNrecord.memento.MementoState;
 
 public class Paste extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Paste(Engine engine) {
-		super(engine);
+	public Paste(Engine engine, GUI ui) {
+		super(engine, ui);
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class Paste extends RecordCommand implements RecordableCommand,LogCommand
 			engine.editorPaste();
 			engine.getRecorder().recordCommand(this);
 			addToLog();
-			}
+		}
 	}
 
 	@Override

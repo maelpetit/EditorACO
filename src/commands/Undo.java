@@ -1,20 +1,21 @@
 package commands;
 
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 
 public class Undo extends Command implements CommandInterface {
 
-	public Undo(Engine eng) {
-		super(eng);
+	public Undo(Engine eng, GUI ui) {
+		super(eng, ui);
 	}
 
 	@Override
 	public void execute() {
 		if(engine.undoAvailable()){
 			engine.editorUndo();
+			
 		}else
 			System.out.println("Undo Unavailable");
-		}
+	}
 
 }

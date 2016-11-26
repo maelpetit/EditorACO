@@ -1,13 +1,13 @@
 package commands;
 
 import editor.*;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.*;
 
 public class Delete extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Delete(Engine engine) {
-		super(engine);
+	public Delete(Engine engine, GUI ui) {
+		super(engine, ui);
 	}
 
 	@Override

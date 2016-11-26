@@ -1,12 +1,12 @@
 package commands;
 
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 
 public class StopRecording extends Command implements CommandInterface {
 	
-	public StopRecording(Engine eng) {
-		super(eng);
+	public StopRecording(Engine eng, GUI GUI) {
+		super(eng, GUI);
 	}
 
 	@Override

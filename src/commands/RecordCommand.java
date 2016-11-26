@@ -1,12 +1,12 @@
 package commands;
 
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 
 public class RecordCommand extends Command {
 
-	public RecordCommand(Engine eng) {
-		super(eng);
+	public RecordCommand(Engine eng, GUI GUI) {
+		super(eng, GUI);
 	}
 
 }

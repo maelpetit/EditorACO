@@ -1,13 +1,13 @@
 package commands;
 
 import editor.*;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.*;
 
 public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
 
-	public Cut(Engine engine) {
-		super(engine);
+	public Cut(Engine engine, GUI ui) {
+		super(engine, ui);
 	}
 
 	@Override

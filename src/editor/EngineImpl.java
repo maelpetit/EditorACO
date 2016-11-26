@@ -82,16 +82,11 @@ public class EngineImpl implements Engine
 		if(stop > buffer.getContent().length()){
 			stop = buffer.getContent().length();
 			System.out.println("DEBUG: stop > buffer.getContent().length()");
-		}else if(stop < 0){
-			stop = 0;
 		}
 		if(start > buffer.getContent().length()){
 			start = buffer.getContent().length();
 			System.out.println("DEBUG: start > buffer.getContent().length()");
-		}else if(start < 0){
-			start = 0;
 		}
-		
 		buffer.getSelection().setContent(buffer.getContent().substring(start, stop));
 		buffer.getSelection().setStart(start);
 		buffer.getSelection().setStop(stop);

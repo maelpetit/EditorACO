@@ -1,14 +1,14 @@
 package commands;
 
 import editor.Engine;
-import gui.start.EditorACOGUI;
+import gui.start.GUI;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoSelectAll;
 
 public class SelectAll extends RecordCommand implements RecordableCommand {
 
-	public SelectAll(Engine eng) {
-		super(eng);
+	public SelectAll(Engine eng, GUI ui) {
+		super(eng, ui);
 	}
 
 	@Override

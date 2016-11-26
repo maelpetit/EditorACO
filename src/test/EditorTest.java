@@ -3,27 +3,12 @@ package test;
 import static org.junit.Assert.*;
 
 import org.junit.*;
-
-import commands.Copy;
-import commands.Cut;
-import commands.Delete;
-import commands.Insert;
-import commands.Paste;
-import commands.Play;
-import commands.Redo;
-import commands.Select;
-import commands.SelectAll;
-import commands.StartRecording;
-import commands.StopRecording;
-import commands.Undo;
-import editor.*;
+import gui.start.MockGUI;
 
 public class EditorTest {
 	
-	private Engine engine;
+	private MockGUI mockUI;
 	
-	
-
 	@BeforeClass
 	public static void setUpOnce() {
 		
@@ -31,22 +16,25 @@ public class EditorTest {
 
 	@Before
 	public void setUpEachTime() {
-		engine = new EngineImpl();
+		mockUI = new MockGUI();
 	}
 	
 	public void insert(String insert){
-		new Insert(engine, insert).execute();
+		mockUI.setText(insert);
+		mockUI.insertAction();
 	}
 	
 	@Test
 	public void testInsert0(){
 		String insert = "bonjour";
 		insert(insert);
-		assertTrue(engine.getBuffer().equals(insert));
+		assertTrue(mockUI.getEngine().getBuffer().equals(insert));
 	}
 	
 	public void select( int start, int stop){
-		new Select(engine, start, stop).execute();
+		mockUI.setGUIStart(start);
+		mockUI.setGUIStop(stop);
+		mockUI.selectAction();
 	}
 	
 	@Test
@@ -54,16 +42,16 @@ public class EditorTest {
 		String insert = "je suis jules";
 		insert(insert);
 		select(6,8);
-		assertTrue(engine.getSelectionStart() == 6 && engine.getSelectionEnd() == 8);
+		assertTrue(mockUI.getEngine().getSelectionStart() == 6 && mockUI.getEngine().getSelectionEnd() == 8);
 	}
 	
 	@Test
 	public void testSelect1(){
 		String insert = "je suis jules";
 		insert(insert);
-		new Select(engine, 25, 54).execute();
-		assertTrue(engine.getSelectionStart() == insert.length() 
-				&& engine.getSelectionEnd() == insert.length());
+		select(25, 54);
+		assertTrue(mockUI.getEngine().getSelectionStart() == insert.length() 
+				&& mockUI.getEngine().getSelectionEnd() == insert.length());
 	}
 	
 	@Test
@@ -71,8 +59,8 @@ public class EditorTest {
 		String insert = "je suis jules";
 		insert(insert);
 		select(0, insert.length());
-		new Copy(engine).execute();
-		assertTrue(engine.getClipboard().equals(insert));
+		mockUI.copyAction();
+		assertTrue(mockUI.getEngine().getClipboard().equals(insert));
 	}
 	
 	@Test
@@ -80,8 +68,8 @@ public class EditorTest {
 		String insert = "je suis jules";
 		insert(insert);
 		select(0, insert.length());
-		new Cut(engine).execute();
-		assertTrue(engine.getBuffer().isEmpty() && engine.getClipboard().equals(insert));
+		mockUI.cutAction();
+		assertTrue(mockUI.getEngine().getBuffer().isEmpty() && mockUI.getEngine().getClipboard().equals(insert));
 	}
 	
 	@Test
@@ -89,8 +77,8 @@ public class EditorTest {
 		String insert = "je suis jules";
 		insert(insert);
 		select(0, insert.length());
-		new Delete(engine).execute();
-		assertTrue(engine.getBuffer().isEmpty());
+		mockUI.deleteAction();
+		assertTrue(mockUI.getEngine().getBuffer().isEmpty());
 	}
 	
 	@Test
@@ -98,72 +86,71 @@ public class EditorTest {
 		String insert = "je suis jules";
 		insert(insert);
 		select(0, insert.length());
-		new Copy(engine).execute();
+		mockUI.copyAction();
 		select(insert.length(), insert.length());
-		new Paste(engine).execute();
-		assertTrue(engine.getBuffer().equals(insert+insert));
+		mockUI.pasteAction();
+		assertTrue(mockUI.getEngine().getBuffer().equals(insert+insert));
 	}
 
 	@Test
 	public void testSelectAll0(){
 		String insert = "je suis jules";
 		insert(insert);
-		new SelectAll(engine).execute();
-		assertTrue(engine.getSelectionStart() == 0
-				&& engine.getSelectionEnd() == insert.length());
-		assertTrue(engine.getSelection().equals(insert));
+		mockUI.selectAllAction();
+		assertTrue(mockUI.getEngine().getSelectionStart() == 0
+				&& mockUI.getEngine().getSelectionEnd() == insert.length());
+		assertTrue(mockUI.getEngine().getSelection().equals(insert));
 	}
 	
 	@Test
 	public void testUndo0(){
 		String insert = "je suis jules";
 		insert(insert);
-		new Undo(engine).execute();
-		assertTrue(engine.getBuffer().isEmpty());
+		mockUI.undoAction();
+		assertTrue(mockUI.getEngine().getBuffer().isEmpty());
 	}
 	
 	@Test
 	public void testRedo0(){
 		String insert = "je suis jules";
 		insert(insert);
-		new Undo(engine).execute();
-		new Redo(engine).execute();
-		assertTrue(engine.getBuffer().equals(insert));
-	}
-	
-	public void startRecording(){
-		new StartRecording(engine).execute();
-	}
-	
-	public void stopRecording(){
-		new StopRecording(engine).execute();
-	}
-	
-	public void playRecording(){
-		new Play(engine).execute();
+		mockUI.undoAction();
+		mockUI.redoAction();
+		assertTrue(mockUI.getEngine().getBuffer().equals(insert));
 	}
 	
 	@Test
 	public void testStartRecording0(){
-		startRecording();
-		assertTrue(engine.getRecorder().isRecording());
+		mockUI.startRecordingAction();
+		assertTrue(mockUI.getEngine().getRecorder().isRecording());
 	}
 	
 	@Test
 	public void testStopRecording0(){
-		startRecording();
-		stopRecording();
-		assertFalse(engine.getRecorder().isRecording());
+		mockUI.startRecordingAction();
+		mockUI.stopRecordingAction();
+		assertFalse(mockUI.getEngine().getRecorder().isRecording());
 	}
 	
 	@Test
 	public void testPlayRecording0(){
-		startRecording();
+		mockUI.startRecordingAction();
 		String insert = "je suis jules";
 		insert(insert);
-		stopRecording();
-		playRecording();
-		assertTrue(engine.getBuffer().equals(insert+insert));
+		mockUI.stopRecordingAction();
+		mockUI.playAction();
+		assertTrue(mockUI.getEngine().getBuffer().equals(insert+insert));
+	}
+	
+	@Test
+	public void testEraseRecording0(){
+		mockUI.startRecordingAction();
+		String insert = "je suis jules";
+		insert(insert);
+		mockUI.stopRecordingAction();
+		assertFalse(mockUI.getEngine().getRecorder().getCmdList().isEmpty());
+		mockUI.startRecordingAction();
+		assertTrue(mockUI.getEngine().getRecorder().getCmdList().isEmpty());
 	}
 	
 	@After
