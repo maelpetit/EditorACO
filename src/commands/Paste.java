@@ -15,7 +15,7 @@ public class Paste extends RecordCommand implements RecordableCommand,LogCommand
 	@Override
 	public void execute() {
 		if(engine.getClipboard().isEmpty())
-			System.out.println("DEBUG: Nothing to paste");
+			System.err.println("DEBUG: Nothing to paste");
 		else{
 			engine.editorPaste();
 			engine.getRecorder().recordCommand(this);

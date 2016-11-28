@@ -13,7 +13,7 @@ public class Copy extends RecordCommand implements RecordableCommand {
 	@Override
 	public void execute() {
 		if(engine.getSelectionStart() == engine.getSelectionEnd())
-			System.out.println("DEBUG: Nothing to copy");
+			System.err.println("DEBUG: Nothing to copy");
 		else{
 			engine.editorCopy();
 			engine.getRecorder().recordCommand(this);

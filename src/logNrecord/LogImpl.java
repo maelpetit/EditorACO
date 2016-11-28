@@ -28,17 +28,17 @@ public class LogImpl implements Log {
 //			stateList.remove(MAX_LOG_SIZE-1);
 //		}
 		stateList.add(0,ms);
-		System.out.println("DEBUG: State = " + (stateList.size()-currentState) + " currentBuffer = " + ms.getText());
+		System.err.println("DEBUG: State = " + (stateList.size()-currentState) + " currentBuffer = " + ms.getText());
 	}
 	
 	public MementoState getPrevState(){
 		if(undoAvailable()){
 			currentState++;
 			MementoState m = stateList.get(currentState);
-			System.out.println("DEBUG: State = " + (stateList.size()-currentState) + " currentBuffer = " + m.getText());
+			System.err.println("DEBUG: State = " + (stateList.size()-currentState) + " currentBuffer = " + m.getText());
 			return m;
 		}else{
-			System.out.println("No previous state available");
+			System.err.println("No previous state available");
 			return null;
 		}
 	}
@@ -48,10 +48,10 @@ public class LogImpl implements Log {
 		if(redoAvailable()){
 			currentState--;
 			MementoState m = stateList.get(currentState);
-			System.out.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getText());
+			System.err.println("DEBUG: currentState = " + currentState + " currentBuffer = " + m.getText());
 			return m;
 		}else{
-			System.out.println("No next state available");
+			System.err.println("No next state available");
 			return null;
 		}
 	}

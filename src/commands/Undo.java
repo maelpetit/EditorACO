@@ -15,7 +15,7 @@ public class Undo extends Command implements CommandInterface {
 			engine.editorUndo();
 			
 		}else
-			System.out.println("Undo Unavailable");
+			System.err.println("Undo Unavailable");
 	}
 
 }

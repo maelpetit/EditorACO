@@ -14,7 +14,7 @@ public class Redo extends Command implements CommandInterface {
 		if(engine.redoAvailable()){
 			engine.editorRedo();
 		}else
-			System.out.println("Redo Unavailable");
+			System.err.println("Redo Unavailable");
 	}
 
 }

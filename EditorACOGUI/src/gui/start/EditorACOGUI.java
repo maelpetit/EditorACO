@@ -466,15 +466,14 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
         	case KeyEvent.VK_Z: undoAction(); break;
         	case KeyEvent.VK_Y: redoAction(); break;
         	case KeyEvent.VK_A: selectAllAction(); break;
-        	case KeyEvent.VK_UNDEFINED: System.out.println("UNDEFINED key shortcut");
-        	default: break;
+        	default: /*System.err.println("UNDEFINED key shortcut");*/ break;
         	}
-                System.out.println("you pressed ALT + " + String.valueOf(evt.getKeyChar()));
+                System.err.println("you pressed ALT + " + String.valueOf(evt.getKeyChar()));
         }else if(evt.getKeyCode() == KeyEvent.VK_CONTROL){
         	insertAction();
-        	System.out.println("you pressed CONTROL");
+        	System.err.println("you pressed CONTROL");
         }else{
-        	System.out.println("Not a command key");
+        	System.err.println("Not a command key");
         }
     }
 	

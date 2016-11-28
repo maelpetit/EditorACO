@@ -38,7 +38,7 @@ public class RecorderImpl implements Recorder { //caretaker
 	@Override
 	public void recordCommand(RecordableCommand c) {
 		if(recording){
-			System.out.println("DEBUG: recording " + c.getClass());
+			System.err.println("DEBUG: recording " + c.getClass());
 			cmdList.add(new CommandMementoPair(c, c.getMemento()));
 		}
 	}

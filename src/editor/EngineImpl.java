@@ -61,7 +61,7 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorInsert(String substring)
 	{
-		System.out.println("DEBUG: inserting text [" + substring + "]");
+		System.err.println("DEBUG: inserting text [" + substring + "]");
 		buffer.setContent(buffer.getContent().substring(0, buffer.getSelection().getStart()) 
 				+ substring
 				+ buffer.getContent().substring(buffer.getSelection().getStop(), buffer.getContent().length()));
@@ -78,14 +78,14 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorSelect(int start, int stop)
 	{
-		System.out.println("DEBUG: selecting interval [" + start + "," + stop + "]");
+		System.err.println("DEBUG: selecting interval [" + start + "," + stop + "]");
 		if(stop > buffer.getContent().length()){
 			stop = buffer.getContent().length();
-			System.out.println("DEBUG: stop > buffer.getContent().length()");
+			System.err.println("DEBUG: stop > buffer.getContent().length()");
 		}
 		if(start > buffer.getContent().length()){
 			start = buffer.getContent().length();
-			System.out.println("DEBUG: start > buffer.getContent().length()");
+			System.err.println("DEBUG: start > buffer.getContent().length()");
 		}
 		buffer.getSelection().setContent(buffer.getContent().substring(start, stop));
 		buffer.getSelection().setStart(start);
@@ -98,7 +98,7 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorCopy()
 	{
-		System.out.println("DEBUG: performing Copy") ;
+		System.err.println("DEBUG: performing Copy") ;
 		buffer.getClipBoard().setContent(buffer.getSelection().getContent());
 
 	}
@@ -109,7 +109,7 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorCut() 
 	{
-		System.out.println("DEBUG: performing Cut") ;
+		System.err.println("DEBUG: performing Cut") ;
 		editorCopy();
 		buffer.setContent(buffer.getContent().substring(0, buffer.getSelection().getStart())
 				+ buffer.getContent().substring(buffer.getSelection().getStop(), buffer.getContent().length()));
@@ -123,7 +123,7 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorPaste()
 	{
-		System.out.println("DEBUG: performing Paste");
+		System.err.println("DEBUG: performing Paste");
 		buffer.setContent(buffer.getContent().substring(0, buffer.getSelection().getStart()) 
 				+ buffer.getClipBoard().getContent() 
 				+ buffer.getContent().substring(buffer.getSelection().getStop(), buffer.getContent().length()));
@@ -135,7 +135,7 @@ public class EngineImpl implements Engine
 	public void editorUndo()
 	{
 		// TODO probleme de modification de la selection quand on undo et redo
-		System.out.println("DEBUG: performing Undo") ;
+		System.err.println("DEBUG: performing Undo") ;
 		MementoState m = log.getPrevState();
 		buffer.setContent(m.getText());
 		buffer.getSelection().setStart(m.getStart());
@@ -145,7 +145,7 @@ public class EngineImpl implements Engine
 	@Override
 	public void editorRedo()
 	{
-		System.out.println("DEBUG: performing Redo");
+		System.err.println("DEBUG: performing Redo");
 		MementoState m = log.getNextState();
 		buffer.setContent(m.getText());
 		buffer.getSelection().setStart(m.getStart());

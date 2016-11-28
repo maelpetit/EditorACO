@@ -2,16 +2,21 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import org.junit.*;
 import gui.start.MockGUI;
 
 public class EditorTest {
 	
 	private MockGUI mockUI;
+	private static PrintStream out;
 	
 	@BeforeClass
 	public static void setUpOnce() {
-		
+		out = System.out;
+		System.setErr(out);
 	}
 
 	@Before
@@ -24,17 +29,29 @@ public class EditorTest {
 		mockUI.insertAction();
 	}
 	
+	public void select( int start, int stop){
+		mockUI.setGUIStart(start);
+		mockUI.setGUIStop(stop);
+		mockUI.selectAction();
+	}
+	
+	public void hideSysOut(){
+		System.setErr(new PrintStream(new OutputStream() {
+		    public void write(int b) {
+		    }
+		}));
+	}
+	
+	public void showSysOut(){
+		System.setErr(out);
+	}
+	
+	
 	@Test
 	public void testInsert0(){
 		String insert = "bonjour";
 		insert(insert);
 		assertTrue(mockUI.getEngine().getBuffer().equals(insert));
-	}
-	
-	public void select( int start, int stop){
-		mockUI.setGUIStart(start);
-		mockUI.setGUIStop(stop);
-		mockUI.selectAction();
 	}
 	
 	@Test
@@ -107,6 +124,32 @@ public class EditorTest {
 		String insert = "je suis jules";
 		insert(insert);
 		mockUI.undoAction();
+		assertTrue(mockUI.getEngine().getBuffer().isEmpty());
+	}
+	
+	@Test
+	public void testUndo50(){
+		String insert = ".";
+		for(int i = 0; i<50; i++){
+			insert(insert);
+		}
+		for(int i = 0; i<50; i++){
+			mockUI.undoAction();
+		}
+		assertTrue(mockUI.getEngine().getBuffer().isEmpty());
+	}
+
+	@Test
+	public void testUndo5000(){
+		hideSysOut();
+		String insert = ".";
+		for(int i = 0; i<5000; i++){
+			insert(insert);
+		}
+		for(int i = 0; i<5000; i++){
+			mockUI.undoAction();
+		}
+		showSysOut();
 		assertTrue(mockUI.getEngine().getBuffer().isEmpty());
 	}
 	
