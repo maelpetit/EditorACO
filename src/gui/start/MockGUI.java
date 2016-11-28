@@ -21,10 +21,12 @@ public class MockGUI implements GUI {
 	private String text;
 	private int startGUISelection;
 	private int stopGUISelection;
+	private boolean eraseRecording;
 
 	public MockGUI() {
 		engine = new EngineImpl();
 		text = "";
+		eraseRecording = true;
 	}
 	
 	public Engine getEngine(){
@@ -41,6 +43,10 @@ public class MockGUI implements GUI {
 	
 	public void setGUIStop(int stop){
 		stopGUISelection = stop;
+	}
+	
+	public void setEraseRecording(boolean erase){
+		eraseRecording = erase;
 	}
 
 	@Override
@@ -110,7 +116,7 @@ public class MockGUI implements GUI {
 
 	@Override
 	public boolean eraseRecording() {
-		return true;
+		return eraseRecording;
 	}
 
 	@Override

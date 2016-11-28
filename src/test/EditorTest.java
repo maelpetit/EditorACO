@@ -129,6 +129,7 @@ public class EditorTest {
 	
 	@Test
 	public void testUndo50(){
+		hideSysOut();
 		String insert = ".";
 		for(int i = 0; i<50; i++){
 			insert(insert);
@@ -136,6 +137,7 @@ public class EditorTest {
 		for(int i = 0; i<50; i++){
 			mockUI.undoAction();
 		}
+		showSysOut();
 		assertTrue(mockUI.getEngine().getBuffer().isEmpty());
 	}
 
@@ -160,6 +162,24 @@ public class EditorTest {
 		mockUI.undoAction();
 		mockUI.redoAction();
 		assertTrue(mockUI.getEngine().getBuffer().equals(insert));
+	}
+	
+	@Test
+	public void testRedo50(){
+		hideSysOut();
+		String insert = ".";
+		for(int i = 0; i<50; i++){
+			insert(insert);
+		}
+		String temp = mockUI.getEngine().getBuffer();
+		for(int i = 0; i<50; i++){
+			mockUI.undoAction();
+		}
+		for(int i = 0; i<50; i++){
+			mockUI.redoAction();
+		}
+		showSysOut();
+		assertTrue(mockUI.getEngine().getBuffer().equals(temp));
 	}
 	
 	@Test
@@ -196,10 +216,24 @@ public class EditorTest {
 		assertTrue(mockUI.getEngine().getRecorder().getCmdList().isEmpty());
 	}
 	
+	@Test
+	public void testEraseRecording1(){
+		mockUI.setEraseRecording(false);
+		mockUI.startRecordingAction();
+		String insert = "je suis jules";
+		insert(insert);
+		mockUI.stopRecordingAction();
+		mockUI.startRecordingAction();
+		insert(insert);
+		mockUI.stopRecordingAction();
+		mockUI.playAction();
+		assertTrue(mockUI.getEngine().getBuffer().equals(insert+insert+insert+insert));
+		assertTrue(mockUI.getEngine().getRecorder().getCmdList().size() == 2);
+	}
+	
 	@After
 	public void cleanEachTime() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }
