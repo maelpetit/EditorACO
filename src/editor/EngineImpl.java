@@ -152,6 +152,7 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStop(m.getStop());
 	}
 
+	@Override
 	public Log getLog() {
 		return log;
 	}
