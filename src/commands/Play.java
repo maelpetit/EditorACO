@@ -7,8 +7,19 @@ import gui.start.GUI;
 import logNrecord.*;
 import logNrecord.memento.MementoState;
 
-public class Play extends RecordCommand implements LogCommand {
+/**
+ * Play Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class Play extends Command implements LogCommand {
 	
+	/**
+	 * Constructor for a Play command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Play(Engine eng, GUI gui) {
 		super(eng, gui);
 	}

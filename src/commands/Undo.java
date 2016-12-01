@@ -3,8 +3,19 @@ package commands;
 import editor.Engine;
 import gui.start.GUI;
 
+/**
+ * Undo Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
 public class Undo extends Command implements CommandInterface {
 
+	/**
+	 * Constructor for a Undo command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Undo(Engine eng, GUI ui) {
 		super(eng, ui);
 	}

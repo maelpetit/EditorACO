@@ -4,8 +4,19 @@ import editor.*;
 import gui.start.GUI;
 import logNrecord.memento.*;
 
-public class Delete extends RecordCommand implements RecordableCommand,LogCommand {
+/**
+ * Delete Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class Delete extends Command implements RecordableCommand,LogCommand {
 
+	/**
+	 * Constructor for a Delete command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Delete(Engine engine, GUI ui) {
 		super(engine, ui);
 	}

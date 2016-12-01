@@ -4,8 +4,19 @@ import editor.*;
 import gui.start.GUI;
 import logNrecord.memento.*;
 
-public class Copy extends RecordCommand implements RecordableCommand {
+/**
+ * Copy Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class Copy extends Command implements RecordableCommand {
 
+	/**
+	 * Constructor for a Copy command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Copy(Engine engine, GUI ui) {
 		super(engine, ui);
 	}

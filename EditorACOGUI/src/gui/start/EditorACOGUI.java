@@ -18,15 +18,24 @@ import commands.*;
 import editor.*;
 
 /**
+ * The jswing GUI class generated with NetBeans
  *
- * @author Mael PETIT, Jules PAGET
+ * @author Forget, Paget, Petit
  */
 public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 
-	private EngineImpl engine;
+	/**
+	 * The Engine
+	 */
+	private Engine engine;
+	
+	/**
+	 * The Object used for highlighting the selected text in the buffer
+	 */
 	private Object highlight;
 
 	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Creates new form EditorACOGUI
 	 */
@@ -273,24 +282,36 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-	public javax.swing.JTextArea getBufferTextArea() {
-		return bufferContent;
-	}
 	
+    /**
+     * Method to update the content of the buffer textArea
+     */
 	private void updateBuffer(){
 		bufferContent.setText(engine.getBuffer());
 	}
+	
+	/**
+     * Method to update the content of the selection textArea
+     */
 	private void updateSelection(){
 		selectionContent.setText(engine.getSelection());
 	}
+	
+	/**
+     * Method to update the content of the clipboard textArea
+     */
 	private void updateClipboard(){
 		clipboardContent.setText(engine.getClipboard());
 	}
 	
+	/**
+	 * Method used to highlight the selected text in the buffer textArea  
+	 * @param start the start of the selection
+	 * @param stop the end of the selection
+	 */
 	private void highlight(int start, int stop){
 		Highlighter highlighter = bufferContent.getHighlighter();
-		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
+		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 		try {
 			if(highlight == null){
 				highlight = highlighter.addHighlight(start, stop, painter );
@@ -303,6 +324,25 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		
 	}
 	
+	/**
+	 * Method used to enable/disable the UndoButton
+	 * @param enable True -> Enabled, False -> Disabled
+	 */
+	private void enableUndoButton(boolean enable){
+		undoButton.setEnabled(enable);
+	}
+	
+	/**
+	 * Method used to enable/disable the RedoButton
+	 * @param enable True -> Enabled, False -> Disabled
+	 */
+	private void enableRedoButton(boolean enable){
+		redoButton.setEnabled(enable);
+	}
+	
+	/**
+	 * Method used to update the GUI to the engine state
+	 */
 	private void updateGUI(){
 		enableRedoButton(engine.redoAvailable());
 		enableUndoButton(engine.undoAvailable());
@@ -311,7 +351,22 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		updateSelection();
 		highlight(engine.getSelectionStart(), engine.getSelectionEnd());
 	}
+
+	@Override
+	public String getText(){
+		return text.getText();
+	}
 	
+	@Override
+	public int getGUIStartSelection(){
+		return bufferContent.getSelectionStart();
+	}
+	
+	@Override
+	public int getGUIStopSelection(){
+		return bufferContent.getSelectionEnd();
+	}
+	@Override
 	public void insertAction(){
 		new Insert(engine, this).execute();
 		updateGUI();
@@ -323,6 +378,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_insertButtonActionPerformed
 	
+	@Override
 	public void playAction(){
 		new Play(engine, this).execute();
 		updateGUI();
@@ -333,6 +389,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_playButtonActionPerformed
 	
+	@Override
 	public void selectAction(){
 		new Select(engine, this).execute();
 		updateSelection();
@@ -349,6 +406,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
     }//GEN-LAST:event_bufferContentMouseReleased
 	
+	@Override
 	public void cutAction(){
 		new Cut(engine ,this).execute();
 		updateGUI();
@@ -359,6 +417,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_cutButtonActionPerformed
 	
+	@Override
 	public void copyAction(){
 		new Copy(engine ,this).execute();
 		updateGUI();
@@ -369,6 +428,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_copyButtonActionPerformed
 	
+	@Override
 	public void pasteAction(){
 		new Paste(engine, this).execute();
 		updateGUI();
@@ -379,14 +439,17 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_pasteButtonActionPerformed
 	
+	@Override
 	public void startRecordingAction(){
 		new StartRecording(engine, this).execute();
 	}
 	
+	@Override
 	public void stopRecordingAction(){
 		new StopRecording(engine, this).execute();
 	}
 	
+	@Override
 	public boolean eraseRecording(){
 		if(!engine.getRecorder().getCmdList().isEmpty()){
 			Object[] options = {"Keep","Erase"};
@@ -417,6 +480,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_recordToggleActionPerformed
 	
+	@Override
 	public void deleteAction(){
 		new Delete(engine, this).execute();
 		updateGUI();
@@ -427,6 +491,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_deleteButtonActionPerformed
 	
+	@Override
 	public void undoAction(){
 		new Undo(engine, this).execute();
 		updateGUI();
@@ -437,6 +502,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_undoButtonActionPerformed
 	
+	@Override
 	public void redoAction(){
 		new Redo(engine, this).execute();
 		updateGUI();
@@ -447,6 +513,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_redoButtonActionPerformed
 	
+	@Override
 	public void selectAllAction(){
 		new SelectAll(engine, this).execute();
 		updateGUI();
@@ -463,6 +530,7 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
         	case KeyEvent.VK_C: copyAction(); break;
         	case KeyEvent.VK_V: pasteAction(); break;
         	case KeyEvent.VK_X: cutAction(); break;
+        	case KeyEvent.VK_D: deleteAction(); break;
         	case KeyEvent.VK_Z: undoAction(); break;
         	case KeyEvent.VK_Y: redoAction(); break;
         	case KeyEvent.VK_A: selectAllAction(); break;
@@ -476,26 +544,6 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
         	System.err.println("Not a command key");
         }
     }
-	
-	public String getText(){
-		return text.getText();
-	}
-	
-	public int getGUIStartSelection(){
-		return bufferContent.getSelectionStart();
-	}
-	
-	public int getGUIStopSelection(){
-		return bufferContent.getSelectionEnd();
-	}
-	
-	private void enableUndoButton(boolean enable){
-		undoButton.setEnabled(enable);
-	}
-	
-	private void enableRedoButton(boolean enable){
-		redoButton.setEnabled(enable);
-	}
 	
 
 	/**

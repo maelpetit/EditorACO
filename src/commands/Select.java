@@ -5,11 +5,29 @@ import gui.start.GUI;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoSelect;
 
-public class Select extends RecordCommand implements RecordableCommand {
+/**
+ * Select Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class Select extends Command implements RecordableCommand {
 
+	/**
+	 * The start of the selection
+	 */
 	private int start;
+	
+	/**
+	 * The stop of the selection
+	 */
 	private int stop;
 	
+	/**
+	 * Constructor for a Select command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Select(Engine eng, GUI ui) {
 		super(eng, ui);
 	}

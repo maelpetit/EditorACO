@@ -3,16 +3,33 @@ package editor;
 import logNrecord.*;
 import logNrecord.memento.MementoState;
 
+/**
+ * The concrete Engine class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
 public class EngineImpl implements Engine
 {
 
 	/**
-	 * the buffer
+	 * The buffer
 	 */
 	private Buffer buffer;
+	
+	/**
+	 * The logger
+	 */
 	private Log log;
+	
+	/**
+	 * The recorder
+	 */
 	private Recorder record;
 	
+	/**
+	 * Constructor for a concrete Engine
+	 */
 	public EngineImpl() {
 		buffer = new Buffer();
 		log = new LogImpl();
@@ -20,44 +37,33 @@ public class EngineImpl implements Engine
 		record = new RecorderImpl();
 	}
 	
-	/**
-	 * Getter for the content of the buffer
-	 * @return the content of the buffer
-	 */
+	
 	@Override
 	public String getBuffer()
 	{
 		return buffer.getContent();
 	}
 
-	/**
-	 * Getter for the content of the selection
-	 * @return the content of the selection
-	 */
+	
 	@Override
 	public String getSelection()
 	{
 		return buffer.getSelection().getContent();
 	}
 
-	/**
-	 * Getter for the content of the clipboard
-	 * @return the content of the clipboard
-	 */
+	
 	@Override
 	public String getClipboard()
 	{
 		return buffer.getClipBoard().getContent();
 	}
-
+	
+	@Override
 	public Recorder getRecorder() {
 		return record;
 	}
 
-	/**
-	 * Method to insert text to the buffer
-	 * @param substring the string to insert
-	 */
+	
 	@Override
 	public void editorInsert(String substring)
 	{
@@ -70,11 +76,7 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStart(buffer.getSelection().getStop());
 	}
 
-	/**
-	 * Method to select some text
-	 * @param start the start of the selection
-	 * @param stop the end of the selection (content[stop] not included)
-	 */
+	
 	@Override
 	public void editorSelect(int start, int stop)
 	{
@@ -92,9 +94,7 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStop(stop);
 	}
 
-	/**
-	 * Method to copy the selection to the clipboard
-	 */
+	
 	@Override
 	public void editorCopy()
 	{
@@ -103,9 +103,7 @@ public class EngineImpl implements Engine
 
 	}
 
-	/**
-	 * Method to copy the selection to the clipboard and cut the selection from the buffer
-	 */
+	
 	@Override
 	public void editorCut() 
 	{
@@ -117,9 +115,7 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setContent("");
 	}
 
-	/**
-	 * Method to delete the selection and copy the clipboard to the selection
-	 */
+	
 	@Override
 	public void editorPaste()
 	{
@@ -130,7 +126,8 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStart(buffer.getSelection().getStart() + buffer.getClipBoard().getContent().length());
 		buffer.getSelection().setStop(buffer.getSelection().getStart());
 	}
-
+	
+	
 	@Override
 	public void editorUndo()
 	{
@@ -142,6 +139,7 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStop(m.getStop());
 	}
 
+	
 	@Override
 	public void editorRedo()
 	{
@@ -152,16 +150,19 @@ public class EngineImpl implements Engine
 		buffer.getSelection().setStop(m.getStop());
 	}
 
+	
 	@Override
 	public Log getLog() {
 		return log;
 	}
 
+	
 	@Override
 	public boolean redoAvailable() {
 		return log.redoAvailable();
 	}
 
+	
 	@Override
 	public boolean undoAvailable() {
 		return log.undoAvailable();

@@ -4,8 +4,19 @@ import editor.*;
 import gui.start.GUI;
 import logNrecord.memento.*;
 
-public class Cut extends RecordCommand implements RecordableCommand,LogCommand {
+/**
+ * Cut Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class Cut extends Command implements RecordableCommand,LogCommand {
 
+	/**
+	 * Constructor for a Cut command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Cut(Engine engine, GUI ui) {
 		super(engine, ui);
 	}

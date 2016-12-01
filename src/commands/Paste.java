@@ -6,8 +6,19 @@ import logNrecord.memento.Memento;
 import logNrecord.memento.MementoPaste;
 import logNrecord.memento.MementoState;
 
-public class Paste extends RecordCommand implements RecordableCommand,LogCommand {
+/**
+ * Paste Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class Paste extends Command implements RecordableCommand,LogCommand {
 
+	/**
+	 * Constructor for a Paste command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public Paste(Engine engine, GUI ui) {
 		super(engine, ui);
 	}

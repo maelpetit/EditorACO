@@ -2,9 +2,9 @@ package editor;
 
 
 /**
+ * The Clipboard class
  * 
- * @author Jules PAGET Maël PETIT
- * @version 1.0
+ * @author Forget, Paget, Petit
  */
 
 

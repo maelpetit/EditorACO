@@ -21,6 +21,7 @@ public class EditorTest {
 
 	@Before
 	public void setUpEachTime() {
+		System.err.println("COUCOU");
 		mockUI = new MockGUI();
 	}
 	

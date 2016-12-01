@@ -5,8 +5,19 @@ import gui.start.GUI;
 import logNrecord.memento.Memento;
 import logNrecord.memento.MementoSelectAll;
 
-public class SelectAll extends RecordCommand implements RecordableCommand {
+/**
+ * SelectAll Command class
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
+public class SelectAll extends Command implements RecordableCommand {
 
+	/**
+	 * Constructor for a SelectAll command
+	 * @param engine the engine
+	 * @param ui the GUI
+	 */
 	public SelectAll(Engine eng, GUI ui) {
 		super(eng, ui);
 	}
