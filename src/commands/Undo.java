@@ -13,7 +13,7 @@ public class Undo extends Command implements CommandInterface {
 
 	/**
 	 * Constructor for a Undo command
-	 * @param engine the engine
+	 * @param eng the engine
 	 * @param ui the GUI
 	 */
 	public Undo(Engine eng, GUI ui) {
@@ -24,7 +24,6 @@ public class Undo extends Command implements CommandInterface {
 	public void execute() {
 		if(engine.undoAvailable()){
 			engine.editorUndo();
-			
 		}else
 			System.err.println("Undo Unavailable");
 	}

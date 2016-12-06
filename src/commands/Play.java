@@ -17,8 +17,8 @@ public class Play extends Command implements LogCommand {
 	
 	/**
 	 * Constructor for a Play command
-	 * @param engine the engine
-	 * @param ui the GUI
+	 * @param eng the engine
+	 * @param gui the GUI
 	 */
 	public Play(Engine eng, GUI gui) {
 		super(eng, gui);

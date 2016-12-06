@@ -80,7 +80,7 @@ public interface Engine
 	public boolean redoAvailable();
 	/**
 	 * Checks if Undo available
-	 * @return true if Redo available, false else
+	 * @return true if Undo available, false else
 	 */
 	public boolean undoAvailable();
 	/**

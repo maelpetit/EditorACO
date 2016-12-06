@@ -13,7 +13,7 @@ public class StartRecording extends Command implements CommandInterface {
 	
 	/**
 	 * Constructor for a StartRecording command
-	 * @param engine the engine
+	 * @param eng the engine
 	 * @param ui the GUI
 	 */
 	public StartRecording(Engine eng, GUI ui) {

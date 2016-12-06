@@ -15,7 +15,7 @@ public class SelectAll extends Command implements RecordableCommand {
 
 	/**
 	 * Constructor for a SelectAll command
-	 * @param engine the engine
+	 * @param eng the engine
 	 * @param ui the GUI
 	 */
 	public SelectAll(Engine eng, GUI ui) {

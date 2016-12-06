@@ -25,7 +25,7 @@ public class Select extends Command implements RecordableCommand {
 	
 	/**
 	 * Constructor for a Select command
-	 * @param engine the engine
+	 * @param eng the engine
 	 * @param ui the GUI
 	 */
 	public Select(Engine eng, GUI ui) {

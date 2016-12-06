@@ -48,8 +48,8 @@ public class Buffer {
 	}
 
 	/**
-	 * Getter for the clipboard
-	 * @return
+	 * Getter for the ClipBoard
+	 * @return the ClipBoard instance
 	 */
 	public ClipBoard getClipBoard() {
 		return clipBoard;
@@ -57,7 +57,7 @@ public class Buffer {
 
 	/**
 	 * Getter for the selection 
-	 * @return
+	 * @return the TextSelection instance
 	 */
 	public TextSelection getSelection() {
 		return selection;

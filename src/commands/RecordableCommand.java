@@ -18,7 +18,7 @@ public interface RecordableCommand extends CommandInterface{
 	
 	/**
 	 * Executes the command in the Play context (ie doesnt add to log)
-	 * @param mem
+	 * @param mem the associated Memento
 	 */
 	void executePlay(Memento mem);
 }

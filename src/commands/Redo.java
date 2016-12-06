@@ -13,7 +13,7 @@ public class Redo extends Command implements CommandInterface {
 
 	/**
 	 * Constructor for a Redo command
-	 * @param engine the engine
+	 * @param eng the engine
 	 * @param ui the GUI
 	 */
 	public Redo(Engine eng ,GUI ui) {

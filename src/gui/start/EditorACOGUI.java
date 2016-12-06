@@ -442,11 +442,15 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 	@Override
 	public void startRecordingAction(){
 		new StartRecording(engine, this).execute();
+		recordToggle.setForeground(Color.RED);
+		recordToggle.setSelected(true);
 	}
 	
 	@Override
 	public void stopRecordingAction(){
 		new StopRecording(engine, this).execute();
+		recordToggle.setForeground(Color.BLACK);
+		recordToggle.setSelected(false);
 	}
 	
 	@Override
@@ -472,10 +476,8 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
 	private void recordToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordToggleActionPerformed
 		if(recordToggle.isSelected()){
 			startRecordingAction();
-			recordToggle.setForeground(Color.RED);
 		}else{
 			stopRecordingAction();
-			recordToggle.setForeground(Color.BLACK);
 		}
 		text.requestFocusInWindow();
 	}//GEN-LAST:event_recordToggleActionPerformed
@@ -538,6 +540,9 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
         	case KeyEvent.VK_Z: undoAction(); break;
         	case KeyEvent.VK_Y: redoAction(); break;
         	case KeyEvent.VK_A: selectAllAction(); break;
+        	case KeyEvent.VK_R: startRecordingAction(); break;
+        	case KeyEvent.VK_E: stopRecordingAction(); break;
+        	case KeyEvent.VK_P: playAction(); break;
         	default: /*System.err.println("UNDEFINED key shortcut");*/ break;
         	}
                 System.err.println("you pressed ALT + " + String.valueOf(evt.getKeyChar()));

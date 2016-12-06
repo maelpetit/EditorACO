@@ -13,11 +13,11 @@ public class StopRecording extends Command implements CommandInterface {
 	
 	/**
 	 * Constructor for a StopRecording command
-	 * @param engine the engine
+	 * @param eng the engine
 	 * @param ui the GUI
 	 */
-	public StopRecording(Engine eng, GUI GUI) {
-		super(eng, GUI);
+	public StopRecording(Engine eng, GUI ui) {
+		super(eng, ui);
 	}
 
 	@Override
