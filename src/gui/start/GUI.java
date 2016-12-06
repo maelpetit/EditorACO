@@ -1,5 +1,11 @@
 package gui.start;
 
+/**
+ * The GUI interface
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
 public interface GUI {
 	/**
 	 * Method used to insert the inserted text

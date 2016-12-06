@@ -524,6 +524,10 @@ public class EditorACOGUI extends javax.swing.JFrame implements GUI{
     }//GEN-LAST:event_textKeyPressed
 
     
+    /**
+     * The key event handler
+     * @param evt the KeyEvent
+     */
     private void keyEventHandler(KeyEvent evt){
     	if(evt.isAltDown()){
         	switch(evt.getKeyCode()){

@@ -5,12 +5,26 @@ import java.util.List;
 
 import logNrecord.memento.MementoState;
 
+/**
+ * The concrete Log class
+ * @author Forget, Paget, Petit
+ *
+ */
 public class LogImpl implements Log {
 	
+	/**
+	 * The list of logged states
+	 */
 	private List<MementoState> stateList;
-	private int currentState;
-//	private final int MAX_LOG_SIZE = 50;
 	
+	/**
+	 * The current state
+	 */
+	private int currentState;
+	
+	/**
+	 * Constructor for a concrete Log
+	 */
 	public LogImpl(){
 		stateList = new ArrayList<>();
 		currentState = 0;
@@ -24,13 +38,11 @@ public class LogImpl implements Log {
 			}
 			currentState = 0;
 		}
-//		else if(stateList.size() >= MAX_LOG_SIZE){
-//			stateList.remove(MAX_LOG_SIZE-1);
-//		}
 		stateList.add(0,ms);
 		System.err.println("DEBUG: State = " + (stateList.size()-currentState) + " currentBuffer = " + ms.getText());
 	}
 	
+	@Override
 	public MementoState getPrevState(){
 		if(undoAvailable()){
 			currentState++;

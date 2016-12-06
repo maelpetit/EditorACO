@@ -15,36 +15,88 @@ import commands.Undo;
 import editor.Engine;
 import editor.EngineImpl;
 
+/**
+ * The mock GUI
+ * 
+ * @author Forget, Paget, Petit
+ *
+ */
 public class MockGUI implements GUI {
 	
+	/**
+	 * The Engine
+	 */
 	private Engine engine;
+	
+	/**
+	 * The mock entered text 
+	 */
 	private String text;
+	
+	/**
+	 * The mock start of the GUI selection
+	 */
 	private int startGUISelection;
+	
+	/**
+	 * The mock end of the GUI selection
+	 */
 	private int stopGUISelection;
+	
+	/**
+	 * Boolean to mock the action of asking to erase the recording
+	 */
 	private boolean eraseRecording;
 
+	/**
+	 * Constructor for a mock GUI
+	 */
 	public MockGUI() {
 		engine = new EngineImpl();
 		text = "";
 		eraseRecording = true;
 	}
 	
+	/**
+	 * Getter for the Engine
+	 * @return the Engine
+	 */
 	public Engine getEngine(){
 		return engine;
 	}
 	
+	/**
+	 * Setter for the mock entered text
+	 * (ie simulation of typed text)
+	 * @param t the entered text
+	 */
 	public void setText(String t){
 		text = t;
 	}
 	
+	/**
+	 * Setter for the mock start of the GUI selection
+	 * (ie simulation of text selection)
+	 * @param start the start of the selection
+	 */
 	public void setGUIStart(int start){
 		startGUISelection = start;
 	}
 	
+	/**
+	 * Setter for the mock end of the GUI selection
+	 * (ie simulation of text selection)
+	 * @param stop the end of the selection
+	 */
 	public void setGUIStop(int stop){
 		stopGUISelection = stop;
 	}
 	
+	/**
+	 * Setter for the eraseRecording boolean
+	 * (ie the GUI asked if the recording has to be erased)
+	 * @param erase True for the recording to be erased 
+	 */
 	public void setEraseRecording(boolean erase){
 		eraseRecording = erase;
 	}
